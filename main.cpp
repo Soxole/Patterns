@@ -147,7 +147,7 @@ int main()
 	RomanArmyBuilder ra_builder;
 	CarthaginianArmyBuilder ca_builder;
 
-	unique_ptr<Army> ra = dir.createArmy()
+	//Stay here some comment!!!
 
 
 

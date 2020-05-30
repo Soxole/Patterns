@@ -41,7 +41,7 @@ public:
 
 	//реализация оператора = для других типов; Присваивание стека с элементами типа Т2
 	template<typename T2>
-	Stack& operator= (Stack<T2> const&);
+	Stack& operator= (Stack<T2> const& );
 
 private:
 	deque<T> elems;
@@ -98,15 +98,3 @@ inline Stack<T> &Stack<T>::operator=(Stack<T2> const &op2)
 	return *this;
 }
 
-
-//функция из примера (не main())
-//shared_ptr<Person> initFamily(const string &name)
-//{
-//	shared_ptr<Person> mom(make_shared<Person>(name + "'s mom"));
-//	shared_ptr<Person> dad(make_shared<Person>(name + "'s dad"));
-//	shared_ptr<Person> kid(make_shared<Person>(name, mom, dad));
-//	mom->kids.emplace_back(kid);
-//	dad->kids.emplace_back(kid);
-//
-//	return kid;
-//}

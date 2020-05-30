@@ -25,3 +25,15 @@ public:
 	~Person() { cout << "delete " << endl; }
 };
 
+
+//функция из примера (не main())
+//shared_ptr<Person> initFamily(const string &name)
+//{
+//	shared_ptr<Person> mom(make_shared<Person>(name + "'s mom"));
+//	shared_ptr<Person> dad(make_shared<Person>(name + "'s dad"));
+//	shared_ptr<Person> kid(make_shared<Person>(name, mom, dad));
+//	mom->kids.emplace_back(kid);
+//	dad->kids.emplace_back(kid);
+//
+//	return kid;
+//}

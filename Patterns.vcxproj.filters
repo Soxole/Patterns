@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов\Factory_method">
+      <UniqueIdentifier>{e4c291a1-935d-47a7-bfb4-eef33096d08f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы ресурсов\Singletone">
+      <UniqueIdentifier>{706d2222-938f-486e-b772-a595b8d16de0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы ресурсов\Builder">
+      <UniqueIdentifier>{26e56a6c-509b-4197-a28c-1be0df14cf97}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FMethod.h">
+      <Filter>Файлы ресурсов\Factory_method</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstract_Factrory.h">
+      <Filter>Файлы ресурсов\Factory_method</Filter>
+    </ClInclude>
+    <ClInclude Include="Person.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Stack_temp.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Singletone.h">
+      <Filter>Файлы ресурсов\Singletone</Filter>
+    </ClInclude>
+    <ClInclude Include="Builder.h">
+      <Filter>Файлы ресурсов\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="Builder_two.h">
+      <Filter>Файлы ресурсов\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="builder_04.h">
+      <Filter>Файлы ресурсов\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="Builder_03.h">
+      <Filter>Файлы ресурсов\Builder</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Person.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Stack_temp.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Singletone.cpp">
+      <Filter>Файлы ресурсов\Singletone</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

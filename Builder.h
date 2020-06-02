@@ -13,9 +13,9 @@ using std::endl;
 class Pizza_Product
 {
 public:
-	void setDough(const std::string dough) { m_dough = dough; }
-	void setSauce(const std::string sauce) { m_sauce = sauce; }
-	void setTopping(const std::string topping) { m_topping = topping; }
+	void setDough(const std::string& dough) { m_dough = dough; }
+	void setSauce(const std::string& sauce) { m_sauce = sauce; }
+	void setTopping(const std::string& topping) { m_topping = topping; }
 
 	void taste() const
 	{
@@ -33,14 +33,8 @@ class Pizza_Bilder
 {
 public:
 	virtual ~Pizza_Bilder() = default;
-	Pizza_Product *getPizza()
-	{
-		return m_pizza.release();
-	}
-	void createNewPizza()
-	{
-		m_pizza = std::make_unique<Pizza_Product>();
-	}
+	Pizza_Product *getPizza(){return m_pizza.release();}
+	void createNewPizza(){m_pizza = std::make_unique<Pizza_Product>();}
 
 	virtual void buildDough() = 0;
 	virtual void buildSauce() = 0;
@@ -55,6 +49,7 @@ protected:
 class Margherita_ConcreteBuilder : public Pizza_Bilder
 {
 public:
+	virtual ~Margherita_ConcreteBuilder() override = default;
 	virtual void buildDough() override { m_pizza->setDough("cross"); }
 	virtual void buildSauce() override { m_pizza->setSauce("tomato"); }
 	virtual void buildTop() override { m_pizza->setTopping("mazzarela+basil"); }
@@ -63,6 +58,7 @@ public:
 class Spicy_ConcreteBuilder : public Pizza_Bilder
 {
 public:
+	virtual ~Spicy_ConcreteBuilder() override = default;
 	virtual void buildDough() override { m_pizza->setDough("pan baked"); }
 	virtual void buildSauce() override { m_pizza->setSauce("tomato+chilli"); }
 	virtual void buildTop() override { m_pizza->setTopping("pepperoni+salami"); }
@@ -87,4 +83,12 @@ private:
 };
 
 
-
+//Cook_Director dir;
+//Margherita_ConcreteBuilder pizzaMargherita;
+//Spicy_ConcreteBuilder pizzaSpicy;
+//
+//dir.makePizza(&pizzaMargherita);
+//dir.tastePizza();
+//
+//dir.makePizza(&pizzaSpicy);
+//dir.tastePizza();

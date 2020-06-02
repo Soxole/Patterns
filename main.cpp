@@ -23,8 +23,8 @@
 #include "Person.h"
 //#include "Singletone.h"
 //#include "Builder_three.h"
-#include "Builder_two.h"
-//#include "Builder.h"
+//#include "Builder_two.h"
+#include "Builder.h"
 
 
 
@@ -81,72 +81,20 @@ namespace temp {
 }
 
 
-template<typename T1>
-constexpr auto GeneratorINT_DOUBLE(T1 a, T1 b)
-{
-	random_device rd;
-	mt19937 mt(rd());
-
-	using uniform_type = conditional_t
-		<is_floating_point<T1>::value,
-		uniform_real_distribution<T1>, //for floating point
-		uniform_int_distribution<T1>>; //for integer
-
-	uniform_type generator(a, b);
-	return generator(mt);
-}
-
-template<typename Tl, typename T2 >
-constexpr common_type_t<Tl, T2> Max2(Tl a, T2 b) //C++ 14 with _t at the end
-{
-	return b < a ? a : b;
-}
-
-
-template<typename T = int, typename T2>
-T sum(T a, T2 b)
-{
-	return a + b;
-}
-
-
-template<typename... T>
-void print(T const &... args)
-{
-	print(args...);
-}
-
-template<size_t... Idx, typename T>
-void printIdx(T const &coll)
-{
-	print(coll[Idx]...);
-}
-
-template<typename T, typename... TN >
-constexpr bool isHomogeneous(T, TN...)
-{
-	return (std::is_same_v<T, TN> && ...); // Начиная с C++17
-}
-
-template<int N, int M>
-bool lesss(char const(&a)[N], char const(&b)[M])
-{
-	for (int i = 0; i < N && i < M; ++i)
-	{
-		if (a[i] < b[i]) return true;
-		if (b[i] < a[i]) return false;
-	}
-	return N < M;
-}
-
-
 
 int main()
 {
-	Director dir;
-	RomanArmyBuilder ra_builder;
-	CarthaginianArmyBuilder ca_builder;
+	Cook_Director dir;
+	Margherita_ConcreteBuilder pizzaMargherita;
+	Spicy_ConcreteBuilder pizzaSpicy;
 
+	dir.makePizza(&pizzaMargherita);
+	dir.tastePizza();
+
+	dir.makePizza(&pizzaSpicy);
+	dir.tastePizza();
+
+	
 	
 
 

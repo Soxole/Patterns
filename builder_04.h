@@ -46,7 +46,6 @@ class ConcreteBuilder1 : public Builder
 private:
 
 	Product1 *product;
-
 	/**
 	 * Новый экземпляр строителя должен содержать пустой объект продукта,
 	 * который используется в дальнейшей сборке.

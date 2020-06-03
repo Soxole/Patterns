@@ -110,6 +110,7 @@ class RomanArmyBuilder : public ArmyBuilder
 {	
 public:
 	void createArmy() {p = make_unique<Army>(); }
+
 	void buildInfantryman() override { p->vi.push_back(Infantryman()); }
 	void buildArcher() override { p->va.push_back(Archer()); }
 	void buildHorseman() override { p->vh.push_back(Horseman()); }
@@ -123,6 +124,7 @@ class CarthaginianArmyBuilder : public ArmyBuilder
 {
 public:
 	void createArmy() override { p = make_unique<Army>(); }
+
 	void buildInfantryman() override { p->vi.push_back(Infantryman()); }
 	void buildArcher() override { p->va.push_back(Archer()); }
 	void buildHorseman() override { p->vh.push_back(Horseman()); }

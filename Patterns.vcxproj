@@ -166,6 +166,7 @@
     <ClInclude Include="Builder.h" />
     <ClInclude Include="builder_04.h" />
     <ClInclude Include="Builder_03.h" />
+    <ClInclude Include="Builder_05.h" />
     <ClInclude Include="Builder_two.h" />
     <ClInclude Include="FMethod.h" />
     <ClInclude Include="Person.h" />

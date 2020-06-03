@@ -22,10 +22,10 @@
 #include "Stack_temp.h"
 #include "Person.h"
 //#include "Singletone.h"
-//#include "Builder_three.h"
 //#include "Builder_two.h"
-#include "Builder.h"
-
+//#include "Builder.h"
+//#include "Builder_03.h"
+#include "Builder_05.h"
 
 
 using namespace std;
@@ -81,26 +81,23 @@ namespace temp {
 }
 
 
-
 int main()
 {
-	Cook_Director dir;
-	Margherita_ConcreteBuilder pizzaMargherita;
-	Spicy_ConcreteBuilder pizzaSpicy;
 
-	dir.makePizza(&pizzaMargherita);
-	dir.tastePizza();
+	Director director;
+	director.setBuilder(std::make_unique<AudiQ7Diesel>());
 
-	dir.makePizza(&pizzaSpicy);
-	dir.tastePizza();
+	std::unique_ptr<Car> audiQ7(std::make_unique<Car>());
+	audiQ7 = director.makeCar();
+	audiQ7->print_info();
 
-	
-	
+	std::cout << std::endl;
+	std::cout << std::endl;
 
-
-
-
-
+	director.setBuilder(std::make_unique<AudiTTGasoline>());
+	std::unique_ptr<Car> audiTT(std::make_unique<Car>());
+	audiTT = director.makeCar();
+	audiTT->print_info();
 
 
 

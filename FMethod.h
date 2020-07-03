@@ -10,7 +10,6 @@ public:
 	virtual void draw() = 0;
 };
 
-
 //product 1
 class T34usa : public BaseTank
 {

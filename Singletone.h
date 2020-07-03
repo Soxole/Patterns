@@ -30,7 +30,6 @@ protected:
 	friend class SingleToneDestroyer;
 public:
 	static SingleTone &getInst(); //ќдиночка определ€ет статический метод getInstance, который возвращает единственный экземпл€р своего	класса
-
 };
 
 

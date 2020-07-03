@@ -26,6 +26,7 @@
 //#include "Builder.h"
 //#include "Builder_03.h"
 #include "Builder_05.h"
+#include <concepts>
 
 
 using namespace std;
@@ -83,21 +84,11 @@ namespace temp {
 
 int main()
 {
+	std::stringstream ss("a");
+	std::cout << ss.str();
+	ss << "b";
+	std::cout << ss.str();
 
-	Director director;
-	director.setBuilder(std::make_unique<AudiQ7Diesel>());
-
-	std::unique_ptr<Car> audiQ7(std::make_unique<Car>());
-	audiQ7 = director.makeCar();
-	audiQ7->print_info();
-
-	std::cout << std::endl;
-	std::cout << std::endl;
-
-	director.setBuilder(std::make_unique<AudiTTGasoline>());
-	std::unique_ptr<Car> audiTT(std::make_unique<Car>());
-	audiTT = director.makeCar();
-	audiTT->print_info();
 
 
 

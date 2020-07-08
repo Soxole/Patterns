@@ -19,14 +19,15 @@
 #include <type_traits>
 #include <cstdarg>
 #include <array>
-#include "Stack_temp.h"
-#include "Person.h"
+#include "Abstract_Factrory.h"
+//#include "Stack_temp.h"
+//#include "Person.h"
 //#include "Singletone.h"
 //#include "Builder_two.h"
 //#include "Builder.h"
 //#include "Builder_03.h"
-#include "Builder_05.h"
-#include <concepts>
+//#include "Builder_05.h"
+//#include <concepts>
 
 
 using namespace std;
@@ -84,14 +85,41 @@ namespace temp {
 
 int main()
 {
-	std::stringstream ss("a");
-	std::cout << ss.str();
-	ss << "b";
-	std::cout << ss.str();
+	//std::stringstream ss("a");
+	//std::cout << ss.str();
+	//ss << "b";
+	//std::cout << ss.str();
 
+	unique_ptr<AppCore> globalCore;
+	int variant = 0;
+	// загружаем что-то
+	// или проверяем на доступность библиотек для:
+	// рисования, баз данных, сети
 
+	// ...
+	variant = 0;// std::rand() % 2;
+	// в зависимости от возможностей, выбираем нужную фабрику
+	// которая настраивает наше ядро на определенные библиотеки
+	// создавая объекты различных типов
+	// которые совершенно не связаны друг с другом
+	switch (variant)
+	{
+	case 0:
+	{
+		auto factory = std::make_unique<AppCorePlatformFactory>();
+		globalCore = std::make_unique<AppCore>(std::move(factory));
+		break;
+	}
+	case 1:
+	{
+		auto factory = std::make_unique<AppCorePlatformFactory2>();
+		globalCore = std::make_unique<AppCore>(std::move(factory));
+		break;
+	}
+	}
 
-
+	// ...
+	globalCore->processing();
 
 	//random_device rd;
 	//mt19937 mt;

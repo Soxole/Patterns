@@ -35,6 +35,7 @@ public:
 	virtual~Larry() = default;
 };
 
+
 class Moe : public Stooge
 {
 public:
@@ -49,7 +50,7 @@ public:
 	virtual~Moe() = default;
 };
 
-
+//фабрика 
 class Factory
 {
 public:
@@ -57,7 +58,6 @@ public:
 	{
 		return s_prototypes[choice]->clone();
 	}
-
 protected:
 	static inline std::array<unique_ptr<Stooge>, 3> s_prototypes = {
 		nullptr, make_unique<Larry>(), make_unique<Moe>()
@@ -67,15 +67,20 @@ protected:
 
 
 /*
-int main()
-	vector<unique_ptr<Stooge>> vec;
-	vec.push_back(make_unique<Larry>());
-	vec.emplace_back(make_unique<Moe>());
+	int main()
+	{
 
-	for (const auto &it : vec)
-		it->slap_stick();
+		vector<unique_ptr<Stooge>> vecProt;
+		auto objLarry = Factory::make_stooge(1);
+		auto objMoe = Factory::make_stooge(2);
+		vecProt.emplace_back(move(objMoe));						<--обязательный std::move(), при добавлении указателя в вектор указателей
+		vecProt.emplace_back(move(Factory::make_stooge(2)));	// при добавлении похожего объекта лучше вызвать метов напрямую
+		vecProt.emplace_back(move(objLarry));
 
+		for (const auto &it : vecProt)
+			it->slap_stick();
 
-
+		return 0;
+	}
 
 */

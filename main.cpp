@@ -102,13 +102,12 @@ int main()
 	vector<unique_ptr<Stooge>> vecProt;
 	auto objLarry = Factory::make_stooge(1);
 	auto objMoe = Factory::make_stooge(2);
-	vecProt.emplace_back(objLarry);
-	vecProt.emplace_back(objMoe);
-	
+	vecProt.emplace_back(move(objMoe));
+	vecProt.emplace_back(move(Factory::make_stooge(2)));
+	vecProt.emplace_back(move(objLarry));
 
-	//for (const auto &it : vec)
-	//	it->slap_stick();
-
+	for (const auto &it : vecProt)
+		it->slap_stick();
 
 
 	//random_device rd;

@@ -22,6 +22,9 @@
     <Filter Include="Файлы ресурсов\Builder">
       <UniqueIdentifier>{26e56a6c-509b-4197-a28c-1be0df14cf97}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы ресурсов\Prototype">
+      <UniqueIdentifier>{ca56f20a-31a4-48dc-a399-5b6dd8e6b15e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FMethod.h">
@@ -53,6 +56,12 @@
     </ClInclude>
     <ClInclude Include="Builder_05.h">
       <Filter>Файлы ресурсов\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="Prototype_01.h">
+      <Filter>Файлы ресурсов\Prototype</Filter>
+    </ClInclude>
+    <ClInclude Include="Prototype_02.h">
+      <Filter>Файлы ресурсов\Prototype</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

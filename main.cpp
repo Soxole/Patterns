@@ -19,7 +19,10 @@
 #include <type_traits>
 #include <cstdarg>
 #include <array>
+#include <map>
 #include "Abstract_Factrory.h"
+#include "Prototype_01.h"
+#include "Prototype_02.h"
 //#include "Stack_temp.h"
 //#include "Person.h"
 //#include "Singletone.h"
@@ -31,7 +34,7 @@
 
 
 using namespace std;
-
+/*
 
 unsigned long long countChange(unsigned money, const std::vector<unsigned> &coins)
 {
@@ -82,44 +85,31 @@ namespace temp {
 	};
 }
 
+namespace std {
+	enum class tmp : size_t
+	{
+		one,
+		two,
+		three
+	};
+}
+*/
+
+
 
 int main()
 {
-	//std::stringstream ss("a");
-	//std::cout << ss.str();
-	//ss << "b";
-	//std::cout << ss.str();
+	vector<unique_ptr<Stooge>> vecProt;
+	auto objLarry = Factory::make_stooge(1);
+	auto objMoe = Factory::make_stooge(2);
+	vecProt.emplace_back(objLarry);
+	vecProt.emplace_back(objMoe);
+	
 
-	unique_ptr<AppCore> globalCore;
-	int variant = 0;
-	// загружаем что-то
-	// или проверяем на доступность библиотек для:
-	// рисования, баз данных, сети
+	//for (const auto &it : vec)
+	//	it->slap_stick();
 
-	// ...
-	variant = 0;// std::rand() % 2;
-	// в зависимости от возможностей, выбираем нужную фабрику
-	// которая настраивает наше ядро на определенные библиотеки
-	// создавая объекты различных типов
-	// которые совершенно не связаны друг с другом
-	switch (variant)
-	{
-	case 0:
-	{
-		auto factory = std::make_unique<AppCorePlatformFactory>();
-		globalCore = std::make_unique<AppCore>(std::move(factory));
-		break;
-	}
-	case 1:
-	{
-		auto factory = std::make_unique<AppCorePlatformFactory2>();
-		globalCore = std::make_unique<AppCore>(std::move(factory));
-		break;
-	}
-	}
 
-	// ...
-	globalCore->processing();
 
 	//random_device rd;
 	//mt19937 mt;

@@ -170,6 +170,8 @@
     <ClInclude Include="Builder_two.h" />
     <ClInclude Include="FMethod.h" />
     <ClInclude Include="Person.h" />
+    <ClInclude Include="Prototype_01.h" />
+    <ClInclude Include="Prototype_02.h" />
     <ClInclude Include="Singletone.h" />
     <ClInclude Include="Stack_temp.h" />
   </ItemGroup>

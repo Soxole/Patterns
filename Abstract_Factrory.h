@@ -7,12 +7,13 @@
 using std::unique_ptr;
 using std::make_unique;
 
+//абстрактный продукт 1
 // интерфейс для рисования
 struct IDrawer
 {
 	virtual void draw() = 0;
 };
-
+//подпродукт
 // рисуем с помощью OpenGL
 struct GLDrawer : IDrawer
 {
@@ -21,7 +22,7 @@ struct GLDrawer : IDrawer
 		std::cout << "OpenGL draw" << std::endl;
 	}
 };
-
+//подпродукт
 // рисуем с помощью DirectX
 struct DirectXDrawer : IDrawer
 {
@@ -31,13 +32,12 @@ struct DirectXDrawer : IDrawer
 	}
 };
 
-/***********************************************/
+//абстрактный продукт 2
 // интерфейс для отправки сообщений по сети
 struct INetworkSender
 {
 	virtual void sendData() = 0;
 };
-
 // отправка сообщения по проводной сети
 struct NetworkWiredSender : INetworkSender
 {
@@ -46,7 +46,6 @@ struct NetworkWiredSender : INetworkSender
 		std::cout << "sended by Wired" << std::endl;
 	}
 };
-
 // отправка сообщения с помощью GSM модуля
 struct NetworkGSMSender : INetworkSender
 {
@@ -56,13 +55,12 @@ struct NetworkGSMSender : INetworkSender
 	}
 };
 
-/***********************************************/
+//абстрактный продукт 3
 // интерфейс для хранения данных в базе
 struct IDataBase
 {
 	virtual void save() = 0;
 };
-
 // хранение в локально базе
 struct LocalDB : IDataBase
 {
@@ -71,7 +69,6 @@ struct LocalDB : IDataBase
 		std::cout << "saved on local" << std::endl;
 	}
 };
-
 // хранение в удаленной базе
 struct RemoteDB : IDataBase
 {
@@ -82,6 +79,8 @@ struct RemoteDB : IDataBase
 };
 
 
+
+//АБСТРАКТНАЯ ФАБРИКА
 // интерфейс фабрики для семейства AppCore
 struct IAppCoreFactory
 {
@@ -89,36 +88,35 @@ struct IAppCoreFactory
 	virtual unique_ptr<INetworkSender> createNetwork() = 0;
 	virtual unique_ptr<IDataBase> createDataBase() = 0;
 };
-
-// фабрика 1 (для платформы с OpenGL, Wired Network, Local DB)
+// конкретная фабрика 1 (для платформы с OpenGL, Wired Network, Local DB)
 struct AppCorePlatformFactory : IAppCoreFactory
 {
-	unique_ptr<IDrawer> createDrawer() override
+	virtual unique_ptr<IDrawer> createDrawer() override
 	{
 		return make_unique<GLDrawer>();
 	}
-	unique_ptr<INetworkSender> createNetwork() override
+	virtual unique_ptr<INetworkSender> createNetwork() override
 	{
 		return make_unique<NetworkWiredSender>();
 	}
-	unique_ptr<IDataBase> createDataBase() override
+	virtual unique_ptr<IDataBase> createDataBase() override
 	{
 		return make_unique<LocalDB>();
 	}
 };
 
-// фабрика 1 (для платформы с DirectX, GSM Network, Remote DB)
+// конкретная фабрика 1 (для платформы с DirectX, GSM Network, Remote DB)
 struct AppCorePlatformFactory2 : IAppCoreFactory
 {
-	unique_ptr<IDrawer> createDrawer() override
+	virtual unique_ptr<IDrawer> createDrawer() override
 	{
 		return make_unique<DirectXDrawer>();
 	}
-	unique_ptr<INetworkSender> createNetwork() override
+	virtual unique_ptr<INetworkSender> createNetwork() override
 	{
 		return make_unique<NetworkGSMSender>();
 	}
-	unique_ptr<IDataBase> createDataBase() override
+	virtual unique_ptr<IDataBase> createDataBase() override
 	{
 		return make_unique<RemoteDB>();
 	}
@@ -146,3 +144,36 @@ private:
 	unique_ptr<INetworkSender> mNetwork;
 	unique_ptr<IDataBase> mDB;
 };
+
+/*
+unique_ptr<AppCore> globalCore;
+int variant = 0;
+// загружаем что-то
+// или проверяем на доступность библиотек для:
+// рисования, баз данных, сети
+
+// ...
+variant = 0;// std::rand() % 2;
+// в зависимости от возможностей, выбираем нужную фабрику
+// которая настраивает наше ядро на определенные библиотеки
+// создавая объекты различных типов
+// которые совершенно не связаны друг с другом
+switch (variant)
+{
+case 0:
+{
+	auto factory = std::make_unique<AppCorePlatformFactory>();
+	globalCore = std::make_unique<AppCore>(std::move(factory));
+	break;
+}
+case 1:
+{
+	auto factory = std::make_unique<AppCorePlatformFactory2>();
+	globalCore = std::make_unique<AppCore>(std::move(factory));
+	break;
+}
+}
+
+// ...
+globalCore->processing();
+*/

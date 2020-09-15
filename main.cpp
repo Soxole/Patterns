@@ -11,27 +11,29 @@
 #include <cassert>
 #include <cstdlib>
 #include <random>
+#include <utility>
+#include "Adapter_01.h"
+/*
 #include <chrono>
 #include <cstdlib>
 #include <bitset>
 #include <stack>
-#include <utility>
 #include <type_traits>
 #include <cstdarg>
 #include <array>
 #include <map>
+#include <concepts>
 #include "Abstract_Factrory.h"
+#include "Stack_temp.h"
+#include "Person.h"
+#include "Singletone.h"
+#include "Builder_two.h"
+#include "Builder.h"
+#include "Builder_03.h"
+#include "Builder_05.h"
 #include "Prototype_01.h"
 #include "Prototype_02.h"
-//#include "Stack_temp.h"
-//#include "Person.h"
-//#include "Singletone.h"
-//#include "Builder_two.h"
-//#include "Builder.h"
-//#include "Builder_03.h"
-//#include "Builder_05.h"
-//#include <concepts>
-
+*/
 
 using namespace std;
 /*
@@ -64,7 +66,7 @@ ull exp_sum(unsigned int n)
 	return c[n];
 }
 
-//преобразовать в бинари 
+//преобразовать в бинари
 void convert(int val, vector<int> &binary)
 {
 	int temp = val % 2;
@@ -99,32 +101,23 @@ namespace std {
 
 int main()
 {
-	vector<unique_ptr<Stooge>> vecProt;
-	auto objLarry = Factory::make_stooge(1);
-	auto objMoe = Factory::make_stooge(2);
-	vecProt.emplace_back(move(objMoe));
-	vecProt.emplace_back(move(Factory::make_stooge(2)));
-	vecProt.emplace_back(move(objLarry));
-
-	for (const auto &it : vecProt)
-		it->slap_stick();
 
 
-	//random_device rd;
-	//mt19937 mt;
-	//uniform_int_distribution<int> gen(1, 10);
-	//vector<int> vec(10);
-	//int i = 1;	
-	//string str;
-	////vector<int> to_vec;
-	//generate(vec.begin(), vec.end(), [&i] {return i++; });
-	//shuffle(vec.begin(), vec.end(), rd);
-	////auto sum = find_if(vec.begin(), vec.end(), [](int j) {return j > 5; });
-	//nth_element(vec.begin(), vec.begin() + 3, vec.end());
-	//copy(vec.begin(), vec.end(), ostream_iterator<int>(cout, " ")); cout << endl;
+		//random_device rd;
+		//mt19937 mt;
+		//uniform_int_distribution<int> gen(1, 10);
+		//vector<int> vec(10);
+		//int i = 1;	
+		//string str;
+		////vector<int> to_vec;
+		//generate(vec.begin(), vec.end(), [&i] {return i++; });
+		//shuffle(vec.begin(), vec.end(), rd);
+		////auto sum = find_if(vec.begin(), vec.end(), [](int j) {return j > 5; });
+		//nth_element(vec.begin(), vec.begin() + 3, vec.end());
+		//copy(vec.begin(), vec.end(), ostream_iterator<int>(cout, " ")); cout << endl;
 
 
-	std::cout << endl;
-	return 0;
-}
+		std::cout << endl;
+		return 0;
+	}
 

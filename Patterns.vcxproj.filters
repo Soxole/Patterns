@@ -25,6 +25,9 @@
     <Filter Include="Файлы ресурсов\Prototype">
       <UniqueIdentifier>{ca56f20a-31a4-48dc-a399-5b6dd8e6b15e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы ресурсов\Adapter">
+      <UniqueIdentifier>{f139bcab-0bd2-4343-8a30-714a7910d1cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FMethod.h">
@@ -62,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="Prototype_02.h">
       <Filter>Файлы ресурсов\Prototype</Filter>
+    </ClInclude>
+    <ClInclude Include="Adapter_01.h">
+      <Filter>Файлы ресурсов\Adapter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

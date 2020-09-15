@@ -59,7 +59,7 @@ public:
 		return s_prototypes[choice]->clone();
 	}
 protected:
-	static inline std::array<unique_ptr<Stooge>, 3> s_prototypes = {
+	static inline std::array<unique_ptr<Stooge>, 3> s_prototypes = {		//using std::array<> с вектором при завершении удаляются ссылки
 		nullptr, make_unique<Larry>(), make_unique<Moe>()
 	};
 
@@ -71,6 +71,7 @@ protected:
 	{
 
 		vector<unique_ptr<Stooge>> vecProt;
+
 		auto objLarry = Factory::make_stooge(1);
 		auto objMoe = Factory::make_stooge(2);
 		vecProt.emplace_back(move(objMoe));						<--обязательный std::move(), при добавлении указателя в вектор указателей

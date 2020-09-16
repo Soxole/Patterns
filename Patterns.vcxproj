@@ -163,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Abstract_Factrory.h" />
+    <ClInclude Include="Adapter_02.h" />
     <ClInclude Include="Builder.h" />
     <ClInclude Include="builder_04.h" />
     <ClInclude Include="Builder_03.h" />

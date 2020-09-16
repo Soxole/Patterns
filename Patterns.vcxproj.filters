@@ -69,6 +69,9 @@
     <ClInclude Include="Adapter_01.h">
       <Filter>Файлы ресурсов\Adapter</Filter>
     </ClInclude>
+    <ClInclude Include="Adapter_02.h">
+      <Filter>Файлы ресурсов\Adapter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

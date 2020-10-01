@@ -90,7 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -164,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="Abstract_Factrory.h" />
     <ClInclude Include="Adapter_02.h" />
+    <ClInclude Include="Bridge_01.h" />
     <ClInclude Include="Builder.h" />
     <ClInclude Include="builder_04.h" />
     <ClInclude Include="Builder_03.h" />

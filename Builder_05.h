@@ -45,6 +45,7 @@ struct Car
 	std::unique_ptr<Body>   mBody;
 };
 
+//interface of the concrete class
 struct Builder
 {
 	virtual std::unique_ptr<Wheel>  make_wheel() = 0;

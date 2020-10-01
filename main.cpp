@@ -12,8 +12,10 @@
 #include <cstdlib>
 #include <random>
 #include <utility>
-#include "Adapter_02.h"
+#include <variant>
+#include "Bridge_01.h"
 /*
+#include "Adapter_02.h"
 #include "Adapter_01.h"
 #include <chrono>
 #include <cstdlib>
@@ -100,25 +102,30 @@ namespace std {
 
 
 
+
+
 int main()
 {
+	unsigned a;
+	cout << boolalpha;
+	cout << is_same<decltype(a), unsigned int>::value << endl;
+	cout << is_same<decltype(a), unsigned long>::value << endl;
+
+	//random_device rd;
+	//mt19937 mt;
+	//uniform_int_distribution<int> gen(1, 10);
+	//vector<int> vec(10);
+	//int i = 1;	
+	//string str;
+	////vector<int> to_vec;
+	//generate(vec.begin(), vec.end(), [&i] {return i++; });
+	//shuffle(vec.begin(), vec.end(), rd);
+	////auto sum = find_if(vec.begin(), vec.end(), [](int j) {return j > 5; });
+	//nth_element(vec.begin(), vec.begin() + 3, vec.end());
+	//copy(vec.begin(), vec.end(), ostream_iterator<int>(cout, " ")); cout << endl;
 
 
-		//random_device rd;
-		//mt19937 mt;
-		//uniform_int_distribution<int> gen(1, 10);
-		//vector<int> vec(10);
-		//int i = 1;	
-		//string str;
-		////vector<int> to_vec;
-		//generate(vec.begin(), vec.end(), [&i] {return i++; });
-		//shuffle(vec.begin(), vec.end(), rd);
-		////auto sum = find_if(vec.begin(), vec.end(), [](int j) {return j > 5; });
-		//nth_element(vec.begin(), vec.begin() + 3, vec.end());
-		//copy(vec.begin(), vec.end(), ostream_iterator<int>(cout, " ")); cout << endl;
-
-
-		std::cout << endl;
-		return 0;
-	}
+	std::cout << endl;
+	return 0;
+}
 

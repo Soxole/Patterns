@@ -28,6 +28,9 @@
     <Filter Include="Файлы ресурсов\Adapter">
       <UniqueIdentifier>{f139bcab-0bd2-4343-8a30-714a7910d1cd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы ресурсов\Bridge">
+      <UniqueIdentifier>{ca64ac7d-9c07-4693-9764-5641fac711e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FMethod.h">
@@ -71,6 +74,9 @@
     </ClInclude>
     <ClInclude Include="Adapter_02.h">
       <Filter>Файлы ресурсов\Adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="Bridge_01.h">
+      <Filter>Файлы ресурсов\Bridge</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

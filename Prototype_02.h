@@ -59,7 +59,7 @@ public:
 		return s_prototypes[choice]->clone();
 	}
 protected:
-	static inline std::array<unique_ptr<Stooge>, 3> s_prototypes = {		//using std::array<> с вектором при завершении удаляются ссылки
+	static inline std::array<unique_ptr<Stooge>, 3> s_prototypes = {		//using std::array<> !!!с вектором при завершении удаляются ссылки
 		nullptr, make_unique<Larry>(), make_unique<Moe>()
 	};
 

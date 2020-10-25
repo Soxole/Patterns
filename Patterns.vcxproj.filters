@@ -31,6 +31,12 @@
     <Filter Include="Файлы ресурсов\Bridge">
       <UniqueIdentifier>{ca64ac7d-9c07-4693-9764-5641fac711e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы ресурсов\Composite">
+      <UniqueIdentifier>{6bcdb079-8314-45a1-bdc3-0a5fc8fba368}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы ресурсов\Decorator">
+      <UniqueIdentifier>{0c9dd359-9957-4207-8aa0-94a6aab43300}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FMethod.h">
@@ -77,6 +83,18 @@
     </ClInclude>
     <ClInclude Include="Bridge_01.h">
       <Filter>Файлы ресурсов\Bridge</Filter>
+    </ClInclude>
+    <ClInclude Include="Composite.h">
+      <Filter>Файлы ресурсов\Composite</Filter>
+    </ClInclude>
+    <ClInclude Include="Composite_02.h">
+      <Filter>Файлы ресурсов\Composite</Filter>
+    </ClInclude>
+    <ClInclude Include="decorater_01.h">
+      <Filter>Файлы ресурсов\Decorator</Filter>
+    </ClInclude>
+    <ClInclude Include="decarotor_02.h">
+      <Filter>Файлы ресурсов\Decorator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,20 +1,26 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iomanip>
 #include <iostream>
-#include <vector>
 #include <memory>
 #include <algorithm>
 #include <string>
+#include <utility>
+#include "decorater_01.h"
+/*
+#include "decarotor_02.h"
+#include "Prototype_01.h"
+#include "Composite_02.h"
+#include <span>
+#include <vector>
+#include <variant>
 #include <regex>
 #include <sstream>
 #include <numeric>
 #include <cassert>
 #include <cstdlib>
 #include <random>
-#include <utility>
-#include <variant>
 #include "Bridge_01.h"
-/*
+#include "Prototype_02.h"
 #include "Adapter_02.h"
 #include "Adapter_01.h"
 #include <chrono>
@@ -34,8 +40,6 @@
 #include "Builder.h"
 #include "Builder_03.h"
 #include "Builder_05.h"
-#include "Prototype_01.h"
-#include "Prototype_02.h"
 */
 
 using namespace std;
@@ -103,13 +107,28 @@ namespace std {
 
 
 
-
 int main()
 {
-	unsigned a;
-	cout << boolalpha;
-	cout << is_same<decltype(a), unsigned int>::value << endl;
-	cout << is_same<decltype(a), unsigned long>::value << endl;
+	/*unique_ptr<IComponent> simple = make_unique<ConcreteComponent>();
+	std::cout << "Client: I've got a simple component:\n";
+	cout << simple->operation() << "\n";
+	cout << "\n\n";
+	unique_ptr<IComponent> decorator_01 = make_unique<ConcreteDecorator_A>(make_unique<Decorator>(move(simple)));
+	unique_ptr<IComponent> decorator_02 = make_unique<ConcreteDecorator_B>(make_unique<Decorator>(move(decorator_01)));
+	std::cout << "Client: Now I've got a decorated component:\n";
+	cout << decorator_02->operation() << "\n";*/
+
+	unique_ptr<IComponent> decorator_03{ make_unique<Decorator>(
+		make_unique<ConcreteDecorator_A>(
+			make_unique<ConcreteDecorator_B>(
+				make_unique<ConcreteComponent>()))) };
+
+	cout << decorator_03->operation() << "\n";
+
+
+	//std::cout << "Client: I don't need to check the components classes even when managing the tree:\n";
+	//ClientCode2(move(tree), move(simple));
+	//std::cout << "\n";
 
 	//random_device rd;
 	//mt19937 mt;

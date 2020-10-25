@@ -106,7 +106,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -170,6 +170,10 @@
     <ClInclude Include="Builder_03.h" />
     <ClInclude Include="Builder_05.h" />
     <ClInclude Include="Builder_two.h" />
+    <ClInclude Include="Composite.h" />
+    <ClInclude Include="Composite_02.h" />
+    <ClInclude Include="decarotor_02.h" />
+    <ClInclude Include="decorater_01.h" />
     <ClInclude Include="FMethod.h" />
     <ClInclude Include="Adapter_01.h" />
     <ClInclude Include="Person.h" />

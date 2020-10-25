@@ -51,6 +51,7 @@ struct Builder
 	virtual std::unique_ptr<Wheel>  make_wheel() = 0;
 	virtual std::unique_ptr<Engine> make_engine() = 0;
 	virtual std::unique_ptr<Body>   make_body() = 0;
+	virtual ~Builder() = default;
 	std::string mName;
 };
 
@@ -85,6 +86,7 @@ struct AudiQ7Diesel : Builder
 		body->type = "SUV";
 		return body;
 	}
+	virtual ~AudiQ7Diesel() override = default;
 };
 
 struct AudiTTGasoline : Builder
@@ -96,7 +98,7 @@ struct AudiTTGasoline : Builder
 
 	std::unique_ptr<Wheel> make_wheel() override
 	{
-		std::unique_ptr<Wheel> wheel = std::make_unique<Wheel>();
+		auto wheel = std::make_unique<Wheel>();
 		wheel->price = 150;
 		wheel->size = 17;
 		return wheel;
@@ -104,7 +106,7 @@ struct AudiTTGasoline : Builder
 
 	std::unique_ptr<Engine> make_engine() override
 	{
-		std::unique_ptr<Engine> engine = std::make_unique<Engine>();
+		auto engine = std::make_unique<Engine>();
 		engine->price = 2500;
 		engine->power = 310;
 		return engine;
@@ -112,7 +114,7 @@ struct AudiTTGasoline : Builder
 
 	std::unique_ptr<Body> make_body() override
 	{
-		std::unique_ptr<Body> body = std::make_unique<Body>();
+		auto body = std::make_unique<Body>();
 		body->price = 2500;
 		body->type = "coupe";
 		return body;
@@ -128,7 +130,7 @@ struct Director
 
 	std::unique_ptr<Car> makeCar()
 	{
-		std::unique_ptr<Car> res = std::make_unique<Car>();
+		auto res = std::make_unique<Car>();
 
 		res->mName = mBuilder->mName;
 		res->mWheel[0] = mBuilder->make_wheel();

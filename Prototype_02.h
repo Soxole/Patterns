@@ -18,6 +18,7 @@ class Stooge
 public:
 	virtual void slap_stick() = 0;
 	virtual unique_ptr<Stooge> clone() = 0;
+	virtual ~Stooge() = default;
 };
 
 
@@ -28,26 +29,26 @@ public:
 	{
 		cout << "class Larry " << endl;
 	}
-	virtual unique_ptr<Stooge> clone() override
+	[[nodiscard]]virtual unique_ptr<Stooge> clone() override
 	{
 		return make_unique<Larry>();
 	}
-	virtual~Larry() = default;
+	virtual~Larry() override = default;
 };
 
 
-class Moe : public Stooge
+class Moe final : public Stooge
 {
 public:
 	virtual void slap_stick() override
 	{
 		cout << "class Moe " << endl;
 	}
-	virtual unique_ptr<Stooge> clone() override
+	[[nodiscard]]virtual unique_ptr<Stooge> clone() override
 	{
 		return make_unique<Moe>();
 	}
-	virtual~Moe() = default;
+	virtual~Moe() override = default;
 };
 
 //фабрика 
@@ -59,7 +60,8 @@ public:
 		return s_prototypes[choice]->clone();
 	}
 protected:
-	static inline std::array<unique_ptr<Stooge>, 3> s_prototypes = {		//using std::array<> !!!с вектором при завершении удаляются ссылки
+	static inline const size_t amountPtrDerivedClass = 3;			//сумма указателей производных классов Larry, Moe
+	static inline std::array<unique_ptr<Stooge>, amountPtrDerivedClass> s_prototypes = {		//using std::array<> !!!с вектором при завершении удаляются ссылки
 		nullptr, make_unique<Larry>(), make_unique<Moe>()
 	};
 

@@ -10,6 +10,7 @@ using std::endl;
 using std::unique_ptr;
 using std::make_unique;
 
+
 // Паттерн Прототип
 //
 // Назначение: Позволяет копировать объекты, не вдаваясь в подробности их
@@ -28,14 +29,15 @@ enum Type
 class Prototype {
 protected:
 	string prototype_name_{};
-	float prototype_field_;
+	float prototype_field_{0.0f};
 
 public:
 	Prototype() = default;
-	Prototype(string prototype_name)
-		: prototype_name_(prototype_name), prototype_field_(0.0f) {
+	Prototype(string &&right_prototype_name)
+		: prototype_name_(std::forward<string>(right_prototype_name)), prototype_field_(0.0f)
+	{
 	}
-	virtual ~Prototype() {}
+	virtual ~Prototype() = default;
 	virtual Prototype *Clone() const = 0;
 	virtual void Method(float prototype_field) {
 		this->prototype_field_ = prototype_field;
@@ -52,12 +54,15 @@ public:
  */
 
 class ConcretePrototype1 : public Prototype {
+	
 private:
-	float concrete_prototype_field1_;
+	[[maybe_unused]] float concrete_prototype_field1_{0.f};
 
 public:
-	ConcretePrototype1(string prototype_name, float concrete_prototype_field)
-		: Prototype(prototype_name), concrete_prototype_field1_(concrete_prototype_field) {
+	~ConcretePrototype1() = default;
+	ConcretePrototype1(string &&prototype_name, float concrete_prototype_field)
+		: Prototype(std::forward<string>(prototype_name)), concrete_prototype_field1_(concrete_prototype_field)
+	{
 	}
 
 	/**
@@ -66,23 +71,26 @@ public:
 	 * to free that memory. I you have smart pointer knowledge you may prefer to
 	 * use unique_pointer here.
 	 */
-	Prototype *Clone() const override {
+	[[nodiscard]] Prototype *Clone() const override {
 		return new ConcretePrototype1(*this);
 	}
 };
 
-class ConcretePrototype2 : public Prototype {
+class ConcretePrototype2 final : public Prototype {
 private:
-	float concrete_prototype_field2_;
+	[[maybe_unused]] float concrete_prototype_field2_{0.f};
 
 public:
-	ConcretePrototype2(string prototype_name, float concrete_prototype_field)
-		: Prototype(prototype_name), concrete_prototype_field2_(concrete_prototype_field) {
+	~ConcretePrototype2() = default;
+	ConcretePrototype2(string &&prototype_name, float concrete_prototype_field)
+		: Prototype(std::forward<string>(prototype_name)), concrete_prototype_field2_(concrete_prototype_field) {
 	}
-	Prototype *Clone() const override {
+	[[nodiscard]] Prototype *Clone() const override {
 		return new ConcretePrototype2(*this);
 	}
 };
+
+
 /*
  * In PrototypeFactory you have two concrete prototypes, one for each concrete
  * prototype class, so each time you want to create a bullet , you can use the
@@ -90,10 +98,11 @@ public:
  */
 class PrototypeFactory {
 private:
-	std::unordered_map<Type, Prototype *, std::hash<int>> prototypes_;
+	std::unordered_map<Type, Prototype *, const std::hash<size_t>> prototypes_;
 
 public:
-	PrototypeFactory() {
+	PrototypeFactory()
+	{
 		prototypes_[Type::PROTOTYPE_1] = new ConcretePrototype1("PROTOTYPE_1 ", 50.f);
 		prototypes_[Type::PROTOTYPE_2] = new ConcretePrototype2("PROTOTYPE_2 ", 60.f);
 	}
@@ -112,11 +121,13 @@ public:
 	 * Notice here that you just need to specify the type of the prototype you
 	 * want and the method will create from the object with this type.
 	 */
-	Prototype *CreatePrototype(Type type) {
+	Prototype *CreatePrototype(const Type type) {
 		return prototypes_[type]->Clone();
 	}
 };
 
+
+/*
 void Client(PrototypeFactory &prototype_factory) {
 	std::cout << "Let's create a Prototype 1\n";
 
@@ -134,10 +145,11 @@ void Client(PrototypeFactory &prototype_factory) {
 	delete prototype;
 }
 
-//int main() {
-//    PrototypeFactory *prototype_factory = new PrototypeFactory();
-//    Client(*prototype_factory);
-//    delete prototype_factory;
-//
-//    return 0;
-//}
+int main() {
+    PrototypeFactory *prototype_factory = new PrototypeFactory();
+    Client(*prototype_factory);
+    delete prototype_factory;
+
+    return 0;
+}
+*/

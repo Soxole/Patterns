@@ -59,12 +59,13 @@ class FahrenheitSensor
 public:
 	FahrenheitSensor() = default;
 	~FahrenheitSensor() = default;
-	float getFahrenheitTemp() {
+	[[nodiscard]] float getFahrenheitTemp() {
 		float t = 103.0f;
 		return t;
 	}
 protected:
-	void oldAdjust() {			// Настройка датчика (защищенный метод)
+	void oldAdjust() const
+	{			// Настройка датчика (защищенный метод)
 	}	
 };
 
@@ -78,14 +79,16 @@ public:
 };
 
 //адаптер, который переводит в цельсия
-class Adapter : public ISensor, private FahrenheitSensor
+class Adapter final : public ISensor, FahrenheitSensor
 {
 public:
 	Adapter() = default;
-	virtual float getTemperature() override {
+	~Adapter() override = default;
+	
+	[[nodiscard]] float getTemperature() override {
 		return (p_fsensor->getFahrenheitTemp() - 32.0f) * 5.0f / 9.0f;
 	}
-	virtual void adjust() override {
+	void adjust() override {
 		oldAdjust();
 	}
 

@@ -37,6 +37,9 @@
     <Filter Include="Файлы ресурсов\Decorator">
       <UniqueIdentifier>{0c9dd359-9957-4207-8aa0-94a6aab43300}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы ресурсов\Facade">
+      <UniqueIdentifier>{3fcc320c-f8c4-4793-a352-4f3ea19a1e50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FMethod.h">
@@ -95,6 +98,15 @@
     </ClInclude>
     <ClInclude Include="decarotor_02.h">
       <Filter>Файлы ресурсов\Decorator</Filter>
+    </ClInclude>
+    <ClInclude Include="bridge_02.h">
+      <Filter>Файлы ресурсов\Bridge</Filter>
+    </ClInclude>
+    <ClInclude Include="facade_01.h">
+      <Filter>Файлы ресурсов\Facade</Filter>
+    </ClInclude>
+    <ClInclude Include="f_method_02.h">
+      <Filter>Файлы ресурсов\Factory_method</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

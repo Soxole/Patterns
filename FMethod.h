@@ -14,6 +14,7 @@ public:
 class T34usa : public BaseTank
 {
 public:
+	
 	void draw() override { std::cout << "I'm heavy tank T34(USA)" << std::endl; }
 };
 
@@ -21,6 +22,7 @@ public:
 class T34ussr : public BaseTank
 {
 public:
+	virtual ~T34ussr() = default;
 	void draw() override { std::cout << "I'm heavy tank T34(USSR)" << std::endl; }
 };
 
@@ -46,12 +48,10 @@ std::unique_ptr<BaseTank> TankFactory::createTnak(eTankType object)
 {
 	switch (object)
 	{
-	case TankFactory::eTankType::T34_USA:
+	case eTankType::T34_USA:
 		return std::make_unique<T34usa>();
-		break;
-	case TankFactory::eTankType::T34_USSR:
+	case eTankType::T34_USSR:
 		return std::make_unique<T34ussr>();
-		break;
 	}
 	return 0;
 }

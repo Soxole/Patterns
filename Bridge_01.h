@@ -15,10 +15,7 @@ using std::make_unique;
 баз данных или работать с разными поставщиками похожего API (например, cloud-сервисы, социальные сети и т. д.)
 Признаки применения паттерна: Если в программе чётко выделены классы «управления» и несколько видов классов «платформ», 
 причём управляющие объекты делегируют выполнение платформам, то можно сказать, что у вас используется Мост.
-*/
 
-
-/*
  * Реализация устанавливает интерфейс для всех классов реализации. Он не должен
  * соответствовать интерфейсу Абстракции. На практике оба интерфейса могут быть
  * совершенно разными. Как правило, интерфейс Реализации предоставляет только
@@ -30,7 +27,7 @@ class IImplementation
 {
 public:
 	virtual~IImplementation() = default;
-	virtual string operationImplement() const = 0;
+	[[nodiscard]] virtual string operationImplement() const = 0;
 };
 
 /*
@@ -40,16 +37,17 @@ public:
 class ConcreatImplementA : public IImplementation
 {
 public:
-	virtual~ConcreatImplementA() = default;
-	virtual string operationImplement() const override {
-		return "ConcreteImpA: Here's the result on the platform A./n";
+	~ConcreatImplementA() override = default;
+	[[nodiscard]] string operationImplement() const override {
+		return "ConcreteImpA: Here's the result on the platform A.\n";
 	}
 };
-class ConcreatImplementB : public IImplementation
+
+class ConcreatImplementB final : public IImplementation
 {
 public:
-	virtual~ConcreatImplementB() = default;
-	virtual string operationImplement() const override {
+	~ConcreatImplementB() override = default;
+	[[nodiscard]] string operationImplement() const override {
 		return "ConcreteImpB: Here's the result on the platform B.\n";
 	}
 };
@@ -64,8 +62,8 @@ class Abstraction
 public:
 	Abstraction(unique_ptr<IImplementation> _upImpl) : upImpl(std::move(_upImpl))
 	{}
-	virtual~Abstraction() = default;
-	virtual string someOperation() const {
+	~Abstraction() = default;
+	[[nodiscard]] string someOperation() const {
 		return "Abstraction: Base operation with:\n" + upImpl->operationImplement();
 	}
 
@@ -81,18 +79,18 @@ class ExtendedAbstr : public Abstraction
 public:
 	ExtendedAbstr(unique_ptr<IImplementation> _upImpl) : Abstraction(std::move(_upImpl))
 	{}
-	virtual~ExtendedAbstr() = default;
-	virtual string someOperation() const override {
+	~ExtendedAbstr() = default;
+	[[nodiscard]] string someOperation() const {
 		return "ExtendedAbstr: Extended operation with:\n" + upImpl->operationImplement();
 	}
 };
 
 /*
 	unique_ptr<IImplementation> upImpl{ make_unique<ConcreatImplementA>() };
-	unique_ptr<Abstraction> upAbstr{ make_unique<Abstraction>(move(upImpl)) };
-	cout << upAbstr->someOperation() << endl;
+	auto upAbstr{ make_unique<Abstraction>(move(upImpl)) };
+	cout << upAbstr->someOperation() << "\n";
 
 	upImpl = make_unique<ConcreatImplementB>();
 	upAbstr = make_unique<ExtendedAbstr>(move(upImpl));
-	cout << upAbstr->someOperation() << endl;
+	cout << upAbstr->someOperation() << "\n";
 */

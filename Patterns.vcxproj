@@ -165,6 +165,7 @@
     <ClInclude Include="Abstract_Factrory.h" />
     <ClInclude Include="Adapter_02.h" />
     <ClInclude Include="Bridge_01.h" />
+    <ClInclude Include="bridge_02.h" />
     <ClInclude Include="Builder.h" />
     <ClInclude Include="builder_04.h" />
     <ClInclude Include="Builder_03.h" />
@@ -174,8 +175,10 @@
     <ClInclude Include="Composite_02.h" />
     <ClInclude Include="decarotor_02.h" />
     <ClInclude Include="decorater_01.h" />
+    <ClInclude Include="facade_01.h" />
     <ClInclude Include="FMethod.h" />
     <ClInclude Include="Adapter_01.h" />
+    <ClInclude Include="f_method_02.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="Prototype_01.h" />
     <ClInclude Include="Prototype_02.h" />

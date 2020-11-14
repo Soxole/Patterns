@@ -5,33 +5,19 @@
 #include <algorithm>
 #include <string>
 #include <utility>
-#include "decorater_01.h"
+#include <vector>
+#include "Bridge_01.h"
+#include "bridge_02.h"
+#include "facade_01.h"
+#include "f_method_02.h"
 /*
+#include "decorater_01.h"
 #include "decarotor_02.h"
 #include "Prototype_01.h"
-#include "Composite_02.h"
-#include <span>
-#include <vector>
-#include <variant>
-#include <regex>
-#include <sstream>
-#include <numeric>
-#include <cassert>
-#include <cstdlib>
-#include <random>
-#include "Bridge_01.h"
 #include "Prototype_02.h"
+#include "Composite_02.h"
 #include "Adapter_02.h"
 #include "Adapter_01.h"
-#include <chrono>
-#include <cstdlib>
-#include <bitset>
-#include <stack>
-#include <type_traits>
-#include <cstdarg>
-#include <array>
-#include <map>
-#include <concepts>
 #include "Abstract_Factrory.h"
 #include "Stack_temp.h"
 #include "Person.h"
@@ -104,27 +90,25 @@ namespace std {
 }
 */
 
+void foo(int *__restrict p)
+{
 
+}
 
+void clientCode(const Creator &creator) {
+	std::cout << "Client: I'm not aware of the creator's class, but it still works.\n"
+		<< creator.someOperation() << std::endl;
+}
 
 int main()
 {
-	/*unique_ptr<IComponent> simple = make_unique<ConcreteComponent>();
-	std::cout << "Client: I've got a simple component:\n";
-	cout << simple->operation() << "\n";
-	cout << "\n\n";
-	unique_ptr<IComponent> decorator_01 = make_unique<ConcreteDecorator_A>(make_unique<Decorator>(move(simple)));
-	unique_ptr<IComponent> decorator_02 = make_unique<ConcreteDecorator_B>(make_unique<Decorator>(move(decorator_01)));
-	std::cout << "Client: Now I've got a decorated component:\n";
-	cout << decorator_02->operation() << "\n";*/
+	const unique_ptr<Creator> creator{ make_unique<ConcreteCreator_1>() };
+	clientCode(*creator);
+	const unique_ptr<Creator> creatorTwo{ make_unique<ConcreteCreator_1>() };
+	clientCode(*creatorTwo);
 
-	unique_ptr<IComponent> decorator_03{ make_unique<Decorator>(
-		make_unique<ConcreteDecorator_A>(
-			make_unique<ConcreteDecorator_B>(
-				make_unique<ConcreteComponent>()))) };
-
-	cout << decorator_03->operation() << "\n";
-
+	const unique_ptr<Creator> creatorThree{make_unique<ConcreteCreator_2>()};
+	clientCode(*creatorThree);
 
 	//std::cout << "Client: I don't need to check the components classes even when managing the tree:\n";
 	//ClientCode2(move(tree), move(simple));

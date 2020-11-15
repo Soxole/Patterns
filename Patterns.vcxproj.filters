@@ -40,12 +40,12 @@
     <Filter Include="Файлы ресурсов\Facade">
       <UniqueIdentifier>{3fcc320c-f8c4-4793-a352-4f3ea19a1e50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы ресурсов\Abstract_factory">
+      <UniqueIdentifier>{ffbcfbea-9c08-4bf4-9acd-5d1f6c2a5692}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FMethod.h">
-      <Filter>Файлы ресурсов\Factory_method</Filter>
-    </ClInclude>
-    <ClInclude Include="Abstract_Factrory.h">
       <Filter>Файлы ресурсов\Factory_method</Filter>
     </ClInclude>
     <ClInclude Include="Person.h">
@@ -107,6 +107,12 @@
     </ClInclude>
     <ClInclude Include="f_method_02.h">
       <Filter>Файлы ресурсов\Factory_method</Filter>
+    </ClInclude>
+    <ClInclude Include="f_method_03.h">
+      <Filter>Файлы ресурсов\Factory_method</Filter>
+    </ClInclude>
+    <ClInclude Include="Abstract_Factrory.h">
+      <Filter>Файлы ресурсов\Abstract_factory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

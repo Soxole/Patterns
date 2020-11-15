@@ -4,6 +4,11 @@
 #include <memory>
 #include <array>
 
+/*
+Прототип — это порождающий паттерн проектирования, который позволяет копировать объекты, 
+не вдаваясь в подробности их реализации.
+
+*/
 
 using std::string;
 using std::cout;
@@ -29,11 +34,10 @@ public:
 	{
 		cout << "class Larry " << endl;
 	}
-	[[nodiscard]]virtual unique_ptr<Stooge> clone() override
+	[[nodiscard]] virtual unique_ptr<Stooge> clone() override
 	{
 		return make_unique<Larry>();
 	}
-	virtual~Larry() override = default;
 };
 
 
@@ -44,11 +48,10 @@ public:
 	{
 		cout << "class Moe " << endl;
 	}
-	[[nodiscard]]virtual unique_ptr<Stooge> clone() override
+	[[nodiscard]] virtual unique_ptr<Stooge> clone() override
 	{
 		return make_unique<Moe>();
 	}
-	virtual~Moe() override = default;
 };
 
 //фабрика 

@@ -6,11 +6,15 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include "Abstract_Factrory.h"
+/*
+#include "Builder_two.h"
+#include "f_method_03.h"
+#include "FMethod.h"
 #include "Bridge_01.h"
 #include "bridge_02.h"
 #include "facade_01.h"
 #include "f_method_02.h"
-/*
 #include "decorater_01.h"
 #include "decarotor_02.h"
 #include "Prototype_01.h"
@@ -18,11 +22,9 @@
 #include "Composite_02.h"
 #include "Adapter_02.h"
 #include "Adapter_01.h"
-#include "Abstract_Factrory.h"
 #include "Stack_temp.h"
 #include "Person.h"
 #include "Singletone.h"
-#include "Builder_two.h"
 #include "Builder.h"
 #include "Builder_03.h"
 #include "Builder_05.h"
@@ -95,20 +97,11 @@ void foo(int *__restrict p)
 
 }
 
-void clientCode(const Creator &creator) {
-	std::cout << "Client: I'm not aware of the creator's class, but it still works.\n"
-		<< creator.someOperation() << std::endl;
-}
 
 int main()
 {
-	const unique_ptr<Creator> creator{ make_unique<ConcreteCreator_1>() };
-	clientCode(*creator);
-	const unique_ptr<Creator> creatorTwo{ make_unique<ConcreteCreator_1>() };
-	clientCode(*creatorTwo);
 
-	const unique_ptr<Creator> creatorThree{make_unique<ConcreteCreator_2>()};
-	clientCode(*creatorThree);
+
 
 	//std::cout << "Client: I don't need to check the components classes even when managing the tree:\n";
 	//ClientCode2(move(tree), move(simple));

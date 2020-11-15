@@ -8,13 +8,13 @@ class BaseTank
 {
 public:
 	virtual void draw() = 0;
+	virtual ~BaseTank() = default;
 };
 
 //product 1
 class T34usa : public BaseTank
 {
-public:
-	
+public:	
 	void draw() override { std::cout << "I'm heavy tank T34(USA)" << std::endl; }
 };
 
@@ -22,7 +22,6 @@ public:
 class T34ussr : public BaseTank
 {
 public:
-	virtual ~T34ussr() = default;
 	void draw() override { std::cout << "I'm heavy tank T34(USSR)" << std::endl; }
 };
 

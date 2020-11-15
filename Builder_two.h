@@ -3,7 +3,8 @@
 #include <vector>
 #include <memory>
 
-//Паттерн Builder определяет процесс поэтапного конструирования сложного объекта, в результате которого могут получаться разные представления этого объекта.
+//Паттерн Builder определяет процесс поэтапного конструирования сложного объекта, 
+//в результате которого могут получаться разные представления этого объекта.
 
 
 using std::unique_ptr;
@@ -88,12 +89,9 @@ public:
 
 class ArmyBuilder
 {
-protected:
-	//Army *p;
-	unique_ptr<Army> p = nullptr;
 public:
 	//ArmyBuilder() : p(nullptr) {}
-	virtual ~ArmyBuilder() {}
+	virtual ~ArmyBuilder() = default;
 	virtual void createArmy() {}
 	virtual void buildInfantryman() {}
 	virtual void buildArcher() {}
@@ -102,6 +100,9 @@ public:
 	virtual void buildElephant() {}
 
 	virtual unique_ptr<Army> getArmy() { return std::move(p); }
+protected:
+	//Army *p;
+	unique_ptr<Army> p = nullptr;
 };
 
 

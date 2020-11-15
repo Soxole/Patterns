@@ -7,14 +7,12 @@
 using std::unique_ptr;
 using std::make_unique;
 
-//абстрактный продукт 1
-// интерфейс для рисования
+//абстрактный продукт 1; интерфейс для рисования
 struct IDrawer
 {
 	virtual void draw() = 0;
 };
-//подпродукт
-// рисуем с помощью OpenGL
+//подпродукт; рисуем с помощью OpenGL
 struct GLDrawer : IDrawer
 {
 	void draw() override
@@ -22,8 +20,7 @@ struct GLDrawer : IDrawer
 		std::cout << "OpenGL draw" << std::endl;
 	}
 };
-//подпродукт
-// рисуем с помощью DirectX
+//подпродукт; рисуем с помощью DirectX
 struct DirectXDrawer : IDrawer
 {
 	void draw() override
@@ -31,9 +28,7 @@ struct DirectXDrawer : IDrawer
 		std::cout << "DirectX draw" << std::endl;
 	}
 };
-
-//абстрактный продукт 2
-// интерфейс для отправки сообщений по сети
+//абстрактный продукт 2; интерфейс для отправки сообщений по сети
 struct INetworkSender
 {
 	virtual void sendData() = 0;
@@ -54,9 +49,7 @@ struct NetworkGSMSender : INetworkSender
 		std::cout << "sended by GSM" << std::endl;
 	}
 };
-
-//абстрактный продукт 3
-// интерфейс для хранения данных в базе
+//абстрактный продукт 3; интерфейс для хранения данных в базе
 struct IDataBase
 {
 	virtual void save() = 0;
@@ -91,32 +84,32 @@ struct IAppCoreFactory
 // конкретная фабрика 1 (для платформы с OpenGL, Wired Network, Local DB)
 struct AppCorePlatformFactory : IAppCoreFactory
 {
-	virtual unique_ptr<IDrawer> createDrawer() override
+	[[nodiscard]] virtual unique_ptr<IDrawer> createDrawer() override
 	{
 		return make_unique<GLDrawer>();
 	}
-	virtual unique_ptr<INetworkSender> createNetwork() override
+	[[nodiscard]] virtual unique_ptr<INetworkSender> createNetwork() override
 	{
 		return make_unique<NetworkWiredSender>();
 	}
-	virtual unique_ptr<IDataBase> createDataBase() override
+	[[nodiscard]] virtual unique_ptr<IDataBase> createDataBase() override
 	{
 		return make_unique<LocalDB>();
 	}
 };
 
-// конкретная фабрика 1 (для платформы с DirectX, GSM Network, Remote DB)
+// конкретная фабрика 2 (для платформы с DirectX, GSM Network, Remote DB)
 struct AppCorePlatformFactory2 : IAppCoreFactory
 {
-	virtual unique_ptr<IDrawer> createDrawer() override
+	[[nodiscard]] virtual unique_ptr<IDrawer> createDrawer() override
 	{
 		return make_unique<DirectXDrawer>();
 	}
-	virtual unique_ptr<INetworkSender> createNetwork() override
+	[[nodiscard]] virtual unique_ptr<INetworkSender> createNetwork() override
 	{
 		return make_unique<NetworkGSMSender>();
 	}
-	virtual unique_ptr<IDataBase> createDataBase() override
+	[[nodiscard]] virtual unique_ptr<IDataBase> createDataBase() override
 	{
 		return make_unique<RemoteDB>();
 	}

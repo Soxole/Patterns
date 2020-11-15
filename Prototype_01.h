@@ -59,7 +59,6 @@ private:
 	[[maybe_unused]] float concrete_prototype_field1_{0.f};
 
 public:
-	~ConcretePrototype1() = default;
 	ConcretePrototype1(string &&prototype_name, float concrete_prototype_field)
 		: Prototype(std::forward<string>(prototype_name)), concrete_prototype_field1_(concrete_prototype_field)
 	{
@@ -81,7 +80,6 @@ private:
 	[[maybe_unused]] float concrete_prototype_field2_{0.f};
 
 public:
-	~ConcretePrototype2() = default;
 	ConcretePrototype2(string &&prototype_name, float concrete_prototype_field)
 		: Prototype(std::forward<string>(prototype_name)), concrete_prototype_field2_(concrete_prototype_field) {
 	}

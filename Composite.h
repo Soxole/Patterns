@@ -20,10 +20,11 @@ public:
 	//setter
 	void setParent(unique_ptr<IComponent> parent)
 	{
-		parent_ = move(parent);
+		m_parent = move(parent);
 	}
 	//getter
-	[[nodiscard]] unique_ptr<IComponent> getParent() const {
+	[[nodiscard]] unique_ptr<IComponent> getParent() const 
+	{
 		return make_unique<IComponent>();
 	}
 	//empty methods 
@@ -41,7 +42,7 @@ public:
 	}
 
 protected:
-	unique_ptr<IComponent> parent_;
+	unique_ptr<IComponent> m_parent;
 };
 /*
  * Класс Лист представляет собой конечные объекты структуры. Лист не может иметь
@@ -54,7 +55,8 @@ protected:
 class Leaf : public IComponent
 {
 public:
-	[[nodiscard]] string operation() const override {
+	[[nodiscard]] string operation() const override 
+	{
 		return "leaf";
 	}
 };
@@ -68,22 +70,24 @@ public:
 class Composite final : public IComponent
 {
 public:
-	void addComp(unique_ptr<IComponent> component) override {
+	void addComp(unique_ptr<IComponent> component) override 
+	{
 		component->setParent(make_unique<Leaf>());
-		children_.push_back(move(component));
+		m_children.push_back(move(component));
 	}
 
-	void removeComp(unique_ptr<IComponent> component) override {
-		children_.remove(component);
+	void removeComp(unique_ptr<IComponent> component) override 
+	{
+		m_children.remove(component);
 		component->setParent(nullptr);
 	}
 
-	[[nodiscard]] string operation() const override {
-
+	[[nodiscard]] string operation() const override
+	{
 		string result;
 
-		for (auto &&component : children_) {
-			if (component == children_.back())
+		for (const auto &component : m_children) {
+			if (component == m_children.back())
 			{
 				result += component->operation();
 			}
@@ -96,20 +100,23 @@ public:
 	}
 
 protected:
-	list <unique_ptr<IComponent>> children_;
+	list <unique_ptr<IComponent>> m_children;
 };
 
 /*
-void client_code(const unique_ptr<IComponent> component) {
+
+ * Благодаря тому, что операции управления потомками объявлены в базовом классе
+ * Компонента, клиентский код может работать как с простыми, так и со сложными
+ * компонентами, вне зависимости от их конкретных классов.
+ 
+
+void client_code(const unique_ptr<IComponent> &component) {
 
 	std::cout << "RESULT: " << component->operation();
 }
 
 
- * Благодаря тому, что операции управления потомками объявлены в базовом классе
- * Компонента, клиентский код может работать как с простыми, так и со сложными
- * компонентами, вне зависимости от их конкретных классов.
-void client_code2(unique_ptr<IComponent> component1, unique_ptr<IComponent> component2) {
+void client_code2(unique_ptr<IComponent> &component1,unique_ptr<IComponent> &component2) {
 
 	if (component1->isComposite()) {
 		component1->addComp(move(component2));
@@ -117,13 +124,12 @@ void client_code2(unique_ptr<IComponent> component1, unique_ptr<IComponent> comp
 	std::cout << "RESULT: " << component1->operation();
 }
 
-
 int main()
 {
 	unique_ptr<IComponent> simple{ make_unique<Leaf>() };
 	std::cout << "Client: I've got a simple component:\n";
-	ClientCode(move(simple));
-	cout << endl;
+	client_code(simple);
+	cout << "\n";
 
 	unique_ptr<IComponent> tree{ make_unique<Composite>() };
 	unique_ptr<IComponent> branch{ make_unique<Composite>() };
@@ -131,21 +137,21 @@ int main()
 	unique_ptr<IComponent> leaf_1{ make_unique<Leaf>() };
 	unique_ptr<IComponent> leaf_2{ make_unique<Leaf>() };
 	unique_ptr<IComponent> leaf_3{ make_unique<Leaf>() };
+
 	branch->addComp(move(leaf_1));
 	branch->addComp(move(leaf_2));
 	unique_ptr<IComponent> branch2{ make_unique<Composite>() };
-	branch->addComp(move(leaf_3));
+	branch2->addComp(move(leaf_3));
 	tree->addComp(move(branch));
 	tree->addComp(move(branch2));
+
 	std::cout << "Client: Now I've got a composite tree:\n";
-	ClientCode(move(tree));
+	client_code(tree);
 	std::cout << "\n\n";
 
 	std::cout << "Client: I don't need to check the components classes even when managing the tree:\n";
-	ClientCode2(move(tree), move(simple));
+	client_code2(tree, simple);
 	std::cout << "\n";
-
-	return 0;
 }
 
 */

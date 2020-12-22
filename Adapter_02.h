@@ -8,7 +8,8 @@ class Target
 {
 public:
 	virtual~Target() = default;
-	virtual std::string requesT() const {
+	virtual std::string requesT() const 
+	{
 		return "Target: the default target's behavior.";
 	}
 };
@@ -17,7 +18,8 @@ public:
 class Adaptee
 {
 public:
-	std::string specificRequest() const {
+	std::string specificRequest() const 
+	{
 		return ".eetpadA eht fo roivaheb laicepS";
 	}
 };
@@ -32,9 +34,11 @@ public:
 	{
 	}
 	~Adapter() = default;
-	virtual std::string requesT() const override {
-		std::string to_reverse = this->ptrAdaptee->specificRequest();
+	virtual std::string requesT() const override 
+	{
+		std::string to_reverse = ptrAdaptee->specificRequest();
 		std::reverse(to_reverse.begin(), to_reverse.end());
+
 		return "Adapter: (tranclated) " + to_reverse;
 	}
 private:
@@ -42,10 +46,24 @@ private:
 };
 
 /*
-	unique_ptr<Target> pTarget = make_unique<Adapter>(make_unique<Adaptee>());
-	cout << pTarget->requesT() << endl;
-	unique_ptr<Target> pTargetTwo( make_unique<Target>() );
-	cout << pTargetTwo->requesT() << endl;
-	unique_ptr<Adaptee> pTargetThree( make_unique<Adaptee>() );
-	cout << pTargetThree->specificRequest() << endl;
+
+void clientCode(const Target &target)
+{
+	cout << target.requesT();
+}
+
+
+
+  std::cout << "Client: I can work just fine with the Target objects:\n";
+  auto target = make_unique<Target>();
+  clientCode(*target);
+  std::cout << "\n\n";
+  auto adaptee = make_unique<Adaptee>();
+  std::cout << "Client: The Adaptee class has a weird interface. See, I don't understand it:\n";
+  std::cout << "Adaptee: " << adaptee->specificRequest();
+  std::cout << "\n\n";
+  std::cout << "Client: But I can work with it via the Adapter:\n";
+  auto adapter = make_unique<Adapter>(move(adaptee));
+  clientCode(*adapter);
+  std::cout << "\n";
 */

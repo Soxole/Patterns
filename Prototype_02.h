@@ -21,8 +21,8 @@ using std::make_unique;
 class Stooge
 {
 public:
-	virtual void slap_stick() = 0;
-	virtual unique_ptr<Stooge> clone() = 0;
+	virtual void slap_stick() const = 0;
+	virtual unique_ptr<Stooge> clone() const = 0;
 	virtual ~Stooge() = default;
 };
 
@@ -30,11 +30,11 @@ public:
 class Larry : public Stooge
 {
 public:
-	virtual void slap_stick() override
+	virtual void slap_stick() const override
 	{
 		cout << "class Larry " << endl;
 	}
-	[[nodiscard]] virtual unique_ptr<Stooge> clone() override
+	[[nodiscard]] virtual unique_ptr<Stooge> clone() const noexcept override
 	{
 		return make_unique<Larry>();
 	}
@@ -44,11 +44,11 @@ public:
 class Moe final : public Stooge
 {
 public:
-	virtual void slap_stick() override
+	virtual void slap_stick() const override
 	{
 		cout << "class Moe " << endl;
 	}
-	[[nodiscard]] virtual unique_ptr<Stooge> clone() override
+	[[nodiscard]] virtual unique_ptr<Stooge> clone() const noexcept override
 	{
 		return make_unique<Moe>();
 	}
@@ -58,7 +58,7 @@ public:
 class Factory
 {
 public:
-	static inline unique_ptr<Stooge> make_stooge(int choice)
+	[[nodiscard]] static inline unique_ptr<Stooge> make_stooge(int choice)
 	{
 		return s_prototypes[choice]->clone();
 	}
@@ -67,7 +67,6 @@ protected:
 	static inline std::array<unique_ptr<Stooge>, amountPtrDerivedClass> s_prototypes = {		//using std::array<> !!!с вектором при завершении удаляются ссылки
 		nullptr, make_unique<Larry>(), make_unique<Moe>()
 	};
-
 };
 
 

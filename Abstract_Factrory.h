@@ -10,62 +10,64 @@ using std::make_unique;
 //абстрактный продукт 1; интерфейс для рисования
 struct IDrawer
 {
-	virtual void draw() = 0;
+	virtual void draw() const = 0;
 };
 //подпродукт; рисуем с помощью OpenGL
-struct GLDrawer : IDrawer
+struct GLDrawer : public IDrawer
 {
-	void draw() override
+	void draw() const override
 	{
 		std::cout << "OpenGL draw" << std::endl;
 	}
 };
 //подпродукт; рисуем с помощью DirectX
-struct DirectXDrawer : IDrawer
+struct DirectXDrawer : public IDrawer
 {
-	void draw() override
+	void draw() const override
 	{
 		std::cout << "DirectX draw" << std::endl;
 	}
 };
+
 //абстрактный продукт 2; интерфейс для отправки сообщений по сети
 struct INetworkSender
 {
-	virtual void sendData() = 0;
+	virtual void sendData() const = 0;
 };
 // отправка сообщения по проводной сети
-struct NetworkWiredSender : INetworkSender
+struct NetworkWiredSender : public INetworkSender
 {
-	void sendData() override
+	void sendData() const override
 	{
 		std::cout << "sended by Wired" << std::endl;
 	}
 };
 // отправка сообщения с помощью GSM модуля
-struct NetworkGSMSender : INetworkSender
+struct NetworkGSMSender : public INetworkSender
 {
-	void sendData() override
+	void sendData() const override
 	{
 		std::cout << "sended by GSM" << std::endl;
 	}
 };
+
 //абстрактный продукт 3; интерфейс для хранения данных в базе
 struct IDataBase
 {
-	virtual void save() = 0;
+	virtual void save() const = 0;
 };
 // хранение в локально базе
-struct LocalDB : IDataBase
+struct LocalDB : public IDataBase
 {
-	void save() override
+	void save() const override
 	{
 		std::cout << "saved on local" << std::endl;
 	}
 };
 // хранение в удаленной базе
-struct RemoteDB : IDataBase
+struct RemoteDB : public IDataBase
 {
-	void save() override
+	void save() const override
 	{
 		std::cout << "saved on remote" << std::endl;
 	}
@@ -77,39 +79,39 @@ struct RemoteDB : IDataBase
 // интерфейс фабрики для семейства AppCore
 struct IAppCoreFactory
 {
-	virtual unique_ptr<IDrawer> createDrawer() = 0;
-	virtual unique_ptr<INetworkSender> createNetwork() = 0;
-	virtual unique_ptr<IDataBase> createDataBase() = 0;
+	virtual unique_ptr<IDrawer> createDrawer() const = 0;
+	virtual unique_ptr<INetworkSender> createNetwork() const = 0;
+	virtual unique_ptr<IDataBase> createDataBase() const = 0;
 };
 // конкретная фабрика 1 (для платформы с OpenGL, Wired Network, Local DB)
-struct AppCorePlatformFactory : IAppCoreFactory
+struct AppCorePlatformFactory : public IAppCoreFactory
 {
-	[[nodiscard]] virtual unique_ptr<IDrawer> createDrawer() override
+	[[nodiscard]] virtual unique_ptr<IDrawer> createDrawer() const override
 	{
 		return make_unique<GLDrawer>();
 	}
-	[[nodiscard]] virtual unique_ptr<INetworkSender> createNetwork() override
+	[[nodiscard]] virtual unique_ptr<INetworkSender> createNetwork() const override
 	{
 		return make_unique<NetworkWiredSender>();
 	}
-	[[nodiscard]] virtual unique_ptr<IDataBase> createDataBase() override
+	[[nodiscard]] virtual unique_ptr<IDataBase> createDataBase() const override
 	{
 		return make_unique<LocalDB>();
 	}
 };
 
 // конкретная фабрика 2 (для платформы с DirectX, GSM Network, Remote DB)
-struct AppCorePlatformFactory2 : IAppCoreFactory
+struct AppCorePlatformFactory2 : public IAppCoreFactory
 {
-	[[nodiscard]] virtual unique_ptr<IDrawer> createDrawer() override
+	[[nodiscard]] virtual unique_ptr<IDrawer> createDrawer() const override
 	{
 		return make_unique<DirectXDrawer>();
 	}
-	[[nodiscard]] virtual unique_ptr<INetworkSender> createNetwork() override
+	[[nodiscard]] virtual unique_ptr<INetworkSender> createNetwork() const override
 	{
 		return make_unique<NetworkGSMSender>();
 	}
-	[[nodiscard]] virtual unique_ptr<IDataBase> createDataBase() override
+	[[nodiscard]] virtual unique_ptr<IDataBase> createDataBase() const override
 	{
 		return make_unique<RemoteDB>();
 	}
@@ -127,9 +129,9 @@ struct AppCore
 	{
 		if (mDrawer)
 			mDrawer->draw();
-		if (mNetwork)
+		else if (mNetwork)
 			mNetwork->sendData();
-		if (mDB)
+		else if (mDB)
 			mDB->save();
 	}
 private:
@@ -156,7 +158,7 @@ switch (variant)
 case 0:
 {
 	auto factory = std::make_unique<AppCorePlatformFactory>();
-	globalCore = std::make_unique<AppCore>(std::move(factory));
+	globalCore = std::make_unique<AppCore>(std::move(factory)); - constr appCore
 	break;
 }
 case 1:

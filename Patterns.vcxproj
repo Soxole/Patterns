@@ -162,6 +162,7 @@
     <ClCompile Include="Stack_temp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="abstract_factory_02.h" />
     <ClInclude Include="Abstract_Factrory.h" />
     <ClInclude Include="Adapter_02.h" />
     <ClInclude Include="Bridge_01.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="Builder_two.h" />
     <ClInclude Include="Composite.h" />
     <ClInclude Include="Composite_02.h" />
+    <ClInclude Include="cor_01.h" />
     <ClInclude Include="decarotor_02.h" />
     <ClInclude Include="decorater_01.h" />
     <ClInclude Include="facade_01.h" />
@@ -183,7 +185,9 @@
     <ClInclude Include="Person.h" />
     <ClInclude Include="Prototype_01.h" />
     <ClInclude Include="Prototype_02.h" />
+    <ClInclude Include="proxy_01.h" />
     <ClInclude Include="Singletone.h" />
+    <ClInclude Include="singletone_02.h" />
     <ClInclude Include="Stack_temp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

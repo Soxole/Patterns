@@ -10,16 +10,17 @@
 class Product1
 {
 public:
-	std::vector<std::string> parts_;
+	std::vector<std::shared_ptr<std::string>> parts_;
 
 	void ListParts()const {
 		std::cout << "Product parts: ";
+
 		for (size_t i = 0; i < parts_.size(); i++) {
 			if (parts_[i] == parts_.back()) {
-				std::cout << parts_[i];
+				std::cout << *parts_[i];
 			}
 			else {
-				std::cout << parts_[i] << ", ";
+				std::cout << *parts_[i] << ", ";
 			}
 		}
 		std::cout << "\n\n";
@@ -31,10 +32,10 @@ public:
  * Интерфейс Строителя объявляет создающие методы для различных частей объектов
  * Продуктов.
  */
-class Builder 
+class Builder
 {
 public:
-	virtual ~Builder() {}
+	virtual ~Builder() = default;
 	virtual void ProducePartA() const = 0;
 	virtual void ProducePartB() const = 0;
 	virtual void ProducePartC() const = 0;
@@ -43,40 +44,21 @@ public:
 //******************************************************************************
 class ConcreteBuilder1 : public Builder
 {
-private:
-
-	Product1 *product;
-	/**
-	 * Новый экземпляр строителя должен содержать пустой объект продукта,
-	 * который используется в дальнейшей сборке.
-	 */
 public:
 
-	ConcreteBuilder1() {
-		this->Reset();
-	}
+	ConcreteBuilder1() { Reset(); }
 
-	~ConcreteBuilder1() {
-		delete product;
-	}
+	void Reset() { m_concrete_product = std::make_shared<Product1>(); }
 
-	void Reset() {
-		this->product = new Product1();
+	//Все этапы производства работают с одним и тем же экземпляром продукта.
+	void ProducePartA() const override {
+		m_concrete_product->parts_.push_back(std::make_shared<std::string>("PartA1"));
 	}
-	/**
-	 * Все этапы производства работают с одним и тем же экземпляром продукта.
-	 */
-
-	void ProducePartA()const override {
-		this->product->parts_.push_back("PartA1");
+	void ProducePartB() const override {
+		m_concrete_product->parts_.push_back(std::make_shared<std::string>("PartB1"));
 	}
-
-	void ProducePartB()const override {
-		this->product->parts_.push_back("PartB1");
-	}
-
-	void ProducePartC()const override {
-		this->product->parts_.push_back("PartC1");
+	void ProducePartC() const override {
+		m_concrete_product->parts_.push_back(std::make_shared<std::string>("PartC1"));
 	}
 
 	/**
@@ -85,9 +67,7 @@ public:
 	 * могут создавать совершенно разные продукты с разными интерфейсами.
 	 * Поэтому такие методы не могут быть объявлены в базовом интерфейсе
 	 * Строителя (по крайней мере, в статически типизированном языке
-	 * программирования). Обратите внимание, что PHP является динамически
-	 * типизированным языком, и этот метод может быть в базовом интерфейсе.
-	 * Однако мы не будем объявлять его здесь для ясности.
+	 * программирования).
 	 *
 	 * Как правило, после возвращения конечного результата клиенту, экземпляр
 	 * строителя должен быть готов к началу производства следующего продукта.
@@ -97,18 +77,20 @@ public:
 	 * клиента, прежде чем избавиться от предыдущего результата.
 	 */
 
-	 /**
-	  * Please be careful here with the memory ownership. Once you call
-	  * GetProduct the user of this function is responsable to release this
-	  * memory. Here could be a better option to use smart pointers to avoid
-	  * memory leaks
-	  */
 
-	Product1 *GetProduct() {
-		Product1 *result = this->product;
-		this->Reset();
+	std::shared_ptr<Product1> GetProduct()
+	{
+		std::shared_ptr<Product1> result = std::move(m_concrete_product);
+		Reset();
 		return result;
 	}
+
+private:
+	/**
+	 * Новый экземпляр строителя должен содержать пустой объект продукта,
+	 * который используется в дальнейшей сборке.
+	 */
+	std::shared_ptr<Product1> m_concrete_product;
 };
 
 /**
@@ -117,65 +99,62 @@ public:
  * порядке или особой конфигурации. Строго говоря, класс Директор необязателен,
  * так как клиент может напрямую управлять строителями.
  */
-class Director {
-	/**
-	 * @var Builder
-	 */
+class Director
+{
+public:
+	//recieve pointer builder
+	void set_builder(std::shared_ptr<Builder> builder)
+	{
+		m_builder = builder;
+	}
+
+	//to build a one solution of the product
+	void BuildMinimalViableProduct()
+	{
+		m_builder->ProducePartA();
+	}
+	//all solutions ...
+	void BuildFullFeaturedProduct()
+	{
+		m_builder->ProducePartA();
+		m_builder->ProducePartB();
+		m_builder->ProducePartC();
+	}
 private:
-	Builder *builder;
+	std::shared_ptr<Builder> m_builder;
 	/**
 	 * Директор работает с любым экземпляром строителя, который передаётся ему
 	 * клиентским кодом. Таким образом, клиентский код может изменить конечный
 	 * тип вновь собираемого продукта.
 	 */
 
-public:
-
-	void set_builder(Builder *builder) {
-		this->builder = builder;
-	}
-
-	/**
-	 * Директор может строить несколько вариаций продукта, используя одинаковые
-	 * шаги построения.
-	 */
-
-	void BuildMinimalViableProduct() {
-		this->builder->ProducePartA();
-	}
-
-	void BuildFullFeaturedProduct() {
-		this->builder->ProducePartA();
-		this->builder->ProducePartB();
-		this->builder->ProducePartC();
-	}
 };
 /**
- * Клиентский код создаёт объект-строитель, передаёт его директору, а затем
- * инициирует процесс построения. Конечный результат извлекается из объекта-
- * строителя.
+* Клиентский код создаёт объект-строитель, передаёт его директору, а затем
+* инициирует процесс построения. Конечный результат извлекается из объекта-
+* строителя.
+*/
+/**
+ * I used raw pointers for simplicity however you may prefer to use smart
+ * pointers here
  */
- /**
-  * I used raw pointers for simplicity however you may prefer to use smart
-  * pointers here
-  */
+
+ /*
 void ClientCode(Director &director)
 {
-	ConcreteBuilder1 *builder = new ConcreteBuilder1();
+	auto builder = make_shared<ConcreteBuilder1>();
 	director.set_builder(builder);
 	std::cout << "Standard basic product:\n";
 	director.BuildMinimalViableProduct();
 
-	Product1 *p = builder->GetProduct();
+	auto p = builder->GetProduct();
 	p->ListParts();
-	delete p;
 
 	std::cout << "Standard full featured product:\n";
 	director.BuildFullFeaturedProduct();
 
 	p = builder->GetProduct();
 	p->ListParts();
-	delete p;
 
 	// Помните, что паттерн Строитель можно использовать без класса Директор.
 	std::cout << "Custom product:\n";
@@ -183,15 +162,14 @@ void ClientCode(Director &director)
 	builder->ProducePartC();
 	p = builder->GetProduct();
 	p->ListParts();
-	delete p;
-
-	delete builder;
 }
 
+int main()
+{
+	auto ptrDirector = make_shared<Director>();
+	ClientCode(*ptrDirector);
 
-//int main() {
-//	Director *director = new Director();
-//	ClientCode(*director);
-//	delete director;
-//	return 0;
-//}
+
+}
+
+*/

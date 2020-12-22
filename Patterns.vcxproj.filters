@@ -43,6 +43,12 @@
     <Filter Include="Файлы ресурсов\Abstract_factory">
       <UniqueIdentifier>{ffbcfbea-9c08-4bf4-9acd-5d1f6c2a5692}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы ресурсов\Proxy">
+      <UniqueIdentifier>{cdc1c8a0-8d91-4001-988e-4f2fd9c9134e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы ресурсов\ChainOfResponsibility">
+      <UniqueIdentifier>{ef046ec3-d03b-44c8-a501-91fcc48294b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FMethod.h">
@@ -113,6 +119,18 @@
     </ClInclude>
     <ClInclude Include="Abstract_Factrory.h">
       <Filter>Файлы ресурсов\Abstract_factory</Filter>
+    </ClInclude>
+    <ClInclude Include="abstract_factory_02.h">
+      <Filter>Файлы ресурсов\Abstract_factory</Filter>
+    </ClInclude>
+    <ClInclude Include="singletone_02.h">
+      <Filter>Файлы ресурсов\Singletone</Filter>
+    </ClInclude>
+    <ClInclude Include="proxy_01.h">
+      <Filter>Файлы ресурсов\Proxy</Filter>
+    </ClInclude>
+    <ClInclude Include="cor_01.h">
+      <Filter>Файлы ресурсов\ChainOfResponsibility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

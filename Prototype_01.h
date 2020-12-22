@@ -4,6 +4,10 @@
 #include <unordered_map>
 #include <memory>
 
+// Паттерн Прототип
+//
+// Назначение: Позволяет копировать объекты, не вдаваясь в подробности их реализации.
+
 using std::string;
 using std::cout;
 using std::endl;
@@ -11,11 +15,7 @@ using std::unique_ptr;
 using std::make_unique;
 
 
-// Паттерн Прототип
-//
-// Назначение: Позволяет копировать объекты, не вдаваясь в подробности их
-// реализации.
-enum Type
+enum class Type : size_t
 {
 	PROTOTYPE_1,
 	PROTOTYPE_2
@@ -27,22 +27,25 @@ enum Type
  */
 
 class Prototype {
-protected:
-	string prototype_name_{};
-	float prototype_field_{0.0f};
-
 public:
 	Prototype() = default;
-	Prototype(string &&right_prototype_name)
-		: prototype_name_(std::forward<string>(right_prototype_name)), prototype_field_(0.0f)
+	Prototype(const string &right_prototype_name)
+		: m_prototypeName(right_prototype_name), m_prototypeField(0.0f)
 	{
 	}
 	virtual ~Prototype() = default;
-	virtual Prototype *Clone() const = 0;
-	virtual void Method(float prototype_field) {
-		this->prototype_field_ = prototype_field;
-		std::cout << "Call Method from " << prototype_name_ << " with field : " << prototype_field << std::endl;
+	//virtual Prototype *Clone() const = 0;
+	void Method(const float &prototype_field) 
+	{
+		m_prototypeField = prototype_field;
+		std::cout << "Call Method from " << m_prototypeName << " with field : " << prototype_field << "\n";
 	}
+	virtual std::unique_ptr<Prototype> Clone() const = 0;
+
+
+protected:
+	string m_prototypeName{};
+	float m_prototypeField{0.0f};
 };
 
 /**
@@ -52,15 +55,12 @@ public:
  * implement the Copy-Constructor to make sure you have a deep copy from the
  * clone method
  */
-
-class ConcretePrototype1 : public Prototype {
+class ConcretePrototype1 : public Prototype 
+{
 	
-private:
-	[[maybe_unused]] float concrete_prototype_field1_{0.f};
-
 public:
-	ConcretePrototype1(string &&prototype_name, float concrete_prototype_field)
-		: Prototype(std::forward<string>(prototype_name)), concrete_prototype_field1_(concrete_prototype_field)
+	ConcretePrototype1(const string &prototype_name, const float &concrete_prototype_field)
+		: Prototype(prototype_name), concrete_prototype_field1_(concrete_prototype_field)
 	{
 	}
 
@@ -70,39 +70,43 @@ public:
 	 * to free that memory. I you have smart pointer knowledge you may prefer to
 	 * use unique_pointer here.
 	 */
-	[[nodiscard]] Prototype *Clone() const override {
-		return new ConcretePrototype1(*this);
+	[[nodiscard]] std::unique_ptr<Prototype> Clone() const noexcept override 
+	{
+		return std::make_unique<ConcretePrototype1>(*this);
 	}
+private:
+	[[maybe_unused]] float concrete_prototype_field1_{0.f};
+
 };
 
-class ConcretePrototype2 final : public Prototype {
+class ConcretePrototype2 final : public Prototype 
+{
+public:
+	ConcretePrototype2(const string &prototype_name, const float &concrete_prototype_field)
+		: Prototype(prototype_name), concrete_prototype_field2_(concrete_prototype_field) 
+	{
+	}
+	[[nodiscard]] std::unique_ptr<Prototype> Clone() const noexcept override  
+	{
+		return std::make_unique<ConcretePrototype2>(*this);
+	}
 private:
 	[[maybe_unused]] float concrete_prototype_field2_{0.f};
 
-public:
-	ConcretePrototype2(string &&prototype_name, float concrete_prototype_field)
-		: Prototype(std::forward<string>(prototype_name)), concrete_prototype_field2_(concrete_prototype_field) {
-	}
-	[[nodiscard]] Prototype *Clone() const override {
-		return new ConcretePrototype2(*this);
-	}
 };
-
-
 /*
  * In PrototypeFactory you have two concrete prototypes, one for each concrete
  * prototype class, so each time you want to create a bullet , you can use the
  * existing ones and clone those.
  */
 class PrototypeFactory {
-private:
-	std::unordered_map<Type, Prototype *, const std::hash<size_t>> prototypes_;
-
 public:
+	~PrototypeFactory() = default;
+
 	PrototypeFactory()
 	{
-		prototypes_[Type::PROTOTYPE_1] = new ConcretePrototype1("PROTOTYPE_1 ", 50.f);
-		prototypes_[Type::PROTOTYPE_2] = new ConcretePrototype2("PROTOTYPE_2 ", 60.f);
+		m_prototypes[Type::PROTOTYPE_1] = std::make_unique<ConcretePrototype1>("PROTOTYPE_1 ", 50.f);
+		m_prototypes[Type::PROTOTYPE_2] = std::make_unique<ConcretePrototype2>("PROTOTYPE_2 ", 60.f);
 	}
 
 	/**
@@ -110,43 +114,38 @@ public:
 	 * knowelege will be better to use it here.
 	 */
 
-	~PrototypeFactory() {
-		delete prototypes_[Type::PROTOTYPE_1];
-		delete prototypes_[Type::PROTOTYPE_2];
-	}
-
 	/**
 	 * Notice here that you just need to specify the type of the prototype you
 	 * want and the method will create from the object with this type.
 	 */
-	Prototype *CreatePrototype(const Type type) {
-		return prototypes_[type]->Clone();
+	std::unique_ptr<Prototype> CreatePrototype(const Type type)
+	{
+		return m_prototypes[type]->Clone();
 	}
+private:
+	std::unordered_map<Type, std::unique_ptr<Prototype>> m_prototypes;
 };
 
 
 /*
-void Client(PrototypeFactory &prototype_factory) {
+void Client(PrototypeFactory &prototype_factory) 
+{
 	std::cout << "Let's create a Prototype 1\n";
 
-	Prototype *prototype = prototype_factory.CreatePrototype(Type::PROTOTYPE_1);
+	auto prototype = prototype_factory.CreatePrototype(Type::PROTOTYPE_1);
 	prototype->Method(90);
-	delete prototype;
 
 	std::cout << "\n";
-
 	std::cout << "Let's create a Prototype 2 \n";
 
 	prototype = prototype_factory.CreatePrototype(Type::PROTOTYPE_2);
 	prototype->Method(10);
-
-	delete prototype;
 }
 
-int main() {
-    PrototypeFactory *prototype_factory = new PrototypeFactory();
-    Client(*prototype_factory);
-    delete prototype_factory;
+int main()
+{
+	auto Prototype_factory = make_unique<PrototypeFactory>();
+    Client(*Prototype_factory);
 
     return 0;
 }

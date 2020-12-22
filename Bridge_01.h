@@ -37,7 +37,6 @@ public:
 class ConcreatImplementA : public IImplementation
 {
 public:
-	~ConcreatImplementA() override = default;
 	[[nodiscard]] string operationImplement() const override {
 		return "ConcreteImpA: Here's the result on the platform A.\n";
 	}
@@ -46,7 +45,6 @@ public:
 class ConcreatImplementB final : public IImplementation
 {
 public:
-	~ConcreatImplementB() override = default;
 	[[nodiscard]] string operationImplement() const override {
 		return "ConcreteImpB: Here's the result on the platform B.\n";
 	}
@@ -79,7 +77,7 @@ class ExtendedAbstr : public Abstraction
 public:
 	ExtendedAbstr(unique_ptr<IImplementation> _upImpl) : Abstraction(std::move(_upImpl))
 	{}
-	~ExtendedAbstr() = default;
+
 	[[nodiscard]] string someOperation() const {
 		return "ExtendedAbstr: Extended operation with:\n" + upImpl->operationImplement();
 	}

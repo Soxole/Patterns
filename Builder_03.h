@@ -16,12 +16,15 @@ using std::make_unique;
 class House
 {
 public:
-	void setWall(const string& wall) { this->wall = wall; }
-	void setWindow(const string& window) { this->window = window; }
-	void setGarage(const string& garage) { this->garage = garage; }
-	void setSwimmingPool(const string& swimmingPool) { this->swimmingPool = swimmingPool; }
+	void setWall(const string &wall) { this->wall = wall; }
+	void setWindow(const string &window) { this->window = window; }
+	void setGarage(const string &garage) { this->garage = garage; }
+	void setSwimmingPool(const string &swimmingPool) { this->swimmingPool = swimmingPool; }
 
-	void info() const { cout << "House: " << wall << " " << window << " " << garage << " " << swimmingPool << endl; }
+	void info() const
+	{
+		cout << "House: " << wall << " " << window << " " << garage << " " << swimmingPool << "\n";
+	}
 private:
 	string wall;
 	string window;
@@ -81,7 +84,6 @@ public:
 	{
 		m_houseCreator = hBuilder;
 		hBuilder->createNewHouse();
-
 		hBuilder->buildWall();
 		hBuilder->builWindow();
 		hBuilder->buildGarage();

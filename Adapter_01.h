@@ -57,16 +57,30 @@ cout << p_Isensor->getTemperature() << endl;
 class FahrenheitSensor
 {
 public:
-	FahrenheitSensor() = default;
+	//explicit FahrenheitSensor(const float &temperature) 
+	//	: m_temperature(temperature)
+	//{
+	//}
 	~FahrenheitSensor() = default;
-	[[nodiscard]] float getFahrenheitTemp() {
-		float t = 103.0f;
+
+	void setTemperatureFar()
+	{
+		std::cout << "Enter value: ";
+		std::cin >> m_temperature;
+	}
+	[[nodiscard]] float getFahrenheitTemp()
+	{
+		float t = 120.3f;
 		return t;
 	}
 protected:
 	void oldAdjust() const
-	{			// Настройка датчика (защищенный метод)
-	}	
+	{
+		// Настройка датчика (защищенный метод)
+		//setTemperatureFar();
+	}
+	float m_temperature{ 103.0f };
+private:
 };
 
 //интерфейсный класс
@@ -74,8 +88,9 @@ class ISensor
 {
 public:
 	virtual~ISensor() = default;
-	virtual float getTemperature() = 0;
+	virtual float getTemperature() const = 0;
 	virtual void adjust() = 0;
+	virtual void setTemperatureFarAdapter(const float &) = 0;
 };
 
 //адаптер, который переводит в цельсия
@@ -83,15 +98,19 @@ class Adapter final : public ISensor, FahrenheitSensor
 {
 public:
 	Adapter() = default;
-	~Adapter() override = default;
-	
-	[[nodiscard]] float getTemperature() override {
+
+	[[nodiscard]] float getTemperature() const override
+	{
 		return (p_fsensor->getFahrenheitTemp() - 32.0f) * 5.0f / 9.0f;
 	}
-	void adjust() override {
+	void adjust() override
+	{
 		oldAdjust();
 	}
-
+	void setTemperatureFarAdapter(const float &valueTemp) override
+	{
+		m_temperature = valueTemp;
+	}
 private:
 	std::unique_ptr<FahrenheitSensor> p_fsensor;
 };

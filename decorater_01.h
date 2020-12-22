@@ -46,15 +46,17 @@ public:
 class Decorator : public IComponent
 {
 protected:
-	std::unique_ptr<IComponent> component_;
+	std::unique_ptr<IComponent> m_component;
 
 public:
 	Decorator(std::unique_ptr<IComponent> component)
-		:component_(std::move(component)) { }
+		:m_component(std::move(component)) 
+	{ 
+	}
 
 	[[nodiscard]] std::string operation() const override
 	{
-		return this->component_->operation();
+		return m_component->operation();
 	}
 };
 
@@ -65,7 +67,9 @@ class ConcreteDecorator_A : public Decorator
 {
 public:
 	ConcreteDecorator_A(std::unique_ptr<IComponent> component)
-		:Decorator(std::move(component)) { }
+		:Decorator(std::move(component))
+	{
+	}
 
 	[[nodiscard]] std::string operation() const override
 	{
@@ -73,11 +77,13 @@ public:
 	}
 };
 
-class ConcreteDecorator_B : public Decorator
+class ConcreteDecorator_B final : public Decorator
 {
 public:
 	ConcreteDecorator_B(std::unique_ptr<IComponent> component)
-		:Decorator(std::move(component)) { }
+		:Decorator(std::move(component)) 
+	{ 
+	}
 	[[nodiscard]] std::string operation() const override
 	{
 		return "ConcreteDecorator_B(" + Decorator::operation() + ")";
@@ -95,20 +101,24 @@ public:
 	std::cout << "Client: I've got a simple component:\n";
 	cout << simple->operation() << "\n";
 	cout << "\n\n";
+	 //--example 01
 	unique_ptr<IComponent> decorator_01 = make_unique<ConcreteDecorator_A>(make_unique<Decorator>(move(simple)));
+	//decorator_01->operation();
 	unique_ptr<IComponent> decorator_02 = make_unique<ConcreteDecorator_B>(make_unique<Decorator>(move(decorator_01)));
 	std::cout << "Client: Now I've got a decorated component:\n";
+
+	//cout << decorator_01->operation() << "\n";
 	cout << decorator_02->operation() << "\n";
 
-	--example 02
-	unique_ptr<IComponent> decorator_03{ make_unique<ConcreteDecorator_A>(
-		make_unique<ConcreteDecorator_B>(
-				make_unique<ConcreteComponent>())) };
-	--example 03
-	unique_ptr<IComponent> decorator_03{ make_unique<Decorator>(
-		make_unique<ConcreteDecorator_A>(
+	//--example 02
+		unique_ptr<IComponent> decorator_03{ make_unique<ConcreteDecorator_A>(
 			make_unique<ConcreteDecorator_B>(
-				make_unique<ConcreteComponent>()))) };
+					make_unique<ConcreteComponent>())) };
+	//--example 03
+		//unique_ptr<IComponent> decorator_03{ make_unique<Decorator>(
+		//	make_unique<ConcreteDecorator_A>(
+		//		make_unique<ConcreteDecorator_B>(
+		//			make_unique<ConcreteComponent>()))) };
 
 	cout << decorator_03->operation() << "\n";
  */

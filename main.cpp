@@ -126,21 +126,6 @@ void client_code2(unique_ptr<IComponent> &component1, unique_ptr<IComponent> &co
 
 int main()
 {
-	auto game = make_shared<Game>();
-	vector<unique_ptr<Command> > v;
-	// Создаем новую игру 
-	v.emplace_back(make_unique<CreateGameCommand>(game));
-	// Делаем несколько ходов
-	v.emplace_back(make_unique<MakeMoveCommand>(game));
-	v.emplace_back(make_unique<MakeMoveCommand>(game));
-	// Последний ход отменяем
-	v.emplace_back(make_unique<UndoCommand>(game));
-	// Сохраняем игру
-	v.emplace_back(make_unique<SaveGameCommand>(game));
-	for (const auto &it : v)
-	{
-		it->execute();
-	}
 
 
 	/*

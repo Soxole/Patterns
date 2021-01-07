@@ -49,6 +49,9 @@
     <Filter Include="Файлы ресурсов\ChainOfResponsibility">
       <UniqueIdentifier>{ef046ec3-d03b-44c8-a501-91fcc48294b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы ресурсов\Command">
+      <UniqueIdentifier>{a5b68c97-48ad-4645-a151-7cb514b03131}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FMethod.h">
@@ -131,6 +134,12 @@
     </ClInclude>
     <ClInclude Include="cor_01.h">
       <Filter>Файлы ресурсов\ChainOfResponsibility</Filter>
+    </ClInclude>
+    <ClInclude Include="command_01.h">
+      <Filter>Файлы ресурсов\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="command_02.h">
+      <Filter>Файлы ресурсов\Command</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,43 +8,43 @@ using namespace std;
 class IComponent
 {
 public:
-	virtual void traverse() const = 0;
 	virtual ~IComponent() = default;
+	virtual void traverse() const = 0;
 };
 
 //leaf
 class Leaf : public IComponent
 {
-private:
-	int value;
 public:
-	explicit Leaf(const int val) : value(val)
+	explicit Leaf(const int val) : m_value(val)
 	{ }
 
-	virtual void traverse() const override
+	void traverse() const override
 	{
-		cout << value << " ";
+		cout << m_value << " ";
 	}
+private:
+	int m_value;
 };
 
 //
 class Composite final : public IComponent
 {
-private:
-	vector<unique_ptr<IComponent>> children;
-	
 public:
 	void add(unique_ptr<IComponent> element)
 	{
-		children.emplace_back(move(element));
+		m_children.emplace_back(move(element));
 	}
-	virtual void traverse() const override
+	void traverse() const override
 	{
-		for (auto &&component : children)
+		for (auto &&component : m_children)
 		{
 			cout << component << " ";
 		}
 	}
+private:
+	vector<unique_ptr<IComponent>> m_children;
+	
 };
 
 

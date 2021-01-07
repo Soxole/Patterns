@@ -1,13 +1,19 @@
 #pragma once
 #include <memory>
-#include <iostream>
 
 using std::shared_ptr;
+
+/*
+Цепочка обязанностей — это поведенческий паттерн проектирования, который позволяет передавать
+запросы последовательно по цепочке обработчиков. Каждый последующий обработчик решает,
+может ли он обработать запрос сам и стоит ли передавать запрос дальше по цепи.
+*/
 
 class IHandler
 {
 public:
-	virtual shared_ptr<IHandler> setNext(shared_ptr<IHandler> Handler) = 0;
+	virtual ~IHandler() = default;
+	virtual shared_ptr<IHandler> set_next(shared_ptr<IHandler> handler) = 0;
 	virtual std::string handle(std::string request) = 0;
 };
 
@@ -17,53 +23,54 @@ public:
 	AbstractHandler() : m_next_handler(nullptr)
 	{
 	}
-	[[nodiscard]] shared_ptr<IHandler> setNext(shared_ptr<IHandler> handler) override {
+	shared_ptr<IHandler> set_next(shared_ptr<IHandler> handler) override {
 		m_next_handler = handler;
 
-		return handler;
+		return m_next_handler;
 	}
 
 	[[nodiscard]] std::string handle(std::string request) override {
 		if (m_next_handler)
 			return m_next_handler->handle(request);
 
-		return {};
+		return "";
 	}
 
 private:
 	shared_ptr<IHandler> m_next_handler;
 };
-
+//concrete handler #1
 class MonkeyHandler : public AbstractHandler
 {
 public:
+
 	[[nodiscard]] std::string handle(std::string request) override {
 		if (request == "Banana")
 			return "Monkey: I'll eat the " + request + ".\n";
-		else
-			return AbstractHandler::handle(request);
+
+		return AbstractHandler::handle(request);
 	}
 };
-
+//concrete handler #2
 class SquirreHandler : public AbstractHandler
 {
 public:
 	[[nodiscard]] std::string handle(std::string request) override {
 		if (request == "Nut")
 			return "Squirrel: I'll eat the " + request + ".\n";
-		else
-			return AbstractHandler::handle(request);
+
+		return AbstractHandler::handle(request);
 	}
 };
-
-class DogHandler : public AbstractHandler
+//concrete handler #3
+class DogHandler final : public AbstractHandler
 {
 public:
 	[[nodiscard]] std::string handle(std::string request) override {
 		if (request == "MeatBall")
 			return "Dog: I'll eat the " + request + ".\n";
-		else
-			return AbstractHandler::handle(request);
+
+		return AbstractHandler::handle(request);
 	}
 };
 

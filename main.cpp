@@ -7,6 +7,7 @@
 #include <utility>
 #include <vector>
 #include "cor_01.h"
+#include "command_02.h"
 /*
 #include "decorater_01.h"
 #include "Composite.h"
@@ -98,9 +99,6 @@ namespace std {
 }
 */
 
-void foo(int *__restrict p)
-{
-}
 
 /*
 void client_code(const unique_ptr<IComponent> &component) {
@@ -116,33 +114,34 @@ void client_code2(unique_ptr<IComponent> &component1, unique_ptr<IComponent> &co
 }
 */
 
-void clientCode(IHandler &handler)
-{
-	vector food{ "Nut", "Banana", "Cup of coffee" };
-	for (const auto &it : food) {
-		cout << "Client: Who wants a " << it << "?\n";
-		const string res = handler.handle(it);
-		if (!res.empty())
-		{
-			cout << " " << res;
-		}
-		else
-			cout << " " << it << " was left untouched.\n";
-	}
-}
+
+
+//auto foo(const auto &x)
+//{
+//	return x;
+//}
+//auto bar(auto &&x) {
+//	return foo(forward<decltype(x)>(x));
+//}
 
 int main()
 {
-	auto monkey = make_unique<MonkeyHandler>();
-	auto squirrel = make_shared<SquirreHandler>();
-	auto dog = make_unique<DogHandler>();
-	monkey->setNext(squirrel);
+	auto game = make_shared<Game>();
+	vector<unique_ptr<Command> > v;
+	// Создаем новую игру 
+	v.emplace_back(make_unique<CreateGameCommand>(game));
+	// Делаем несколько ходов
+	v.emplace_back(make_unique<MakeMoveCommand>(game));
+	v.emplace_back(make_unique<MakeMoveCommand>(game));
+	// Последний ход отменяем
+	v.emplace_back(make_unique<UndoCommand>(game));
+	// Сохраняем игру
+	v.emplace_back(make_unique<SaveGameCommand>(game));
+	for (const auto &it : v)
+	{
+		it->execute();
+	}
 
-	cout << "Chain: Monkey > Squirrel > Dog\n\n";
-	clientCode(*monkey);
-	cout << "\n";
-	cout << "Subchain: Squirrel > Dog\n\n";
-	clientCode(*squirrel);
 
 	/*
 	unique_ptr<IComponent> simple{ make_unique<Leaf>() };

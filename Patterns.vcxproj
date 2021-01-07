@@ -172,6 +172,8 @@
     <ClInclude Include="Builder_03.h" />
     <ClInclude Include="Builder_05.h" />
     <ClInclude Include="Builder_two.h" />
+    <ClInclude Include="command_01.h" />
+    <ClInclude Include="command_02.h" />
     <ClInclude Include="Composite.h" />
     <ClInclude Include="Composite_02.h" />
     <ClInclude Include="cor_01.h" />

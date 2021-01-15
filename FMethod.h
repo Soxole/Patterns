@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <memory>
-#include <vector>
 
 //Base class abstract
 class BaseTank
@@ -37,13 +36,13 @@ public:
 		T34_USSR
 	};
 	
-	static std::unique_ptr<BaseTank> createTnak(eTankType object);
+	static std::unique_ptr<BaseTank> createTank(eTankType object);
 };
 //***************************************************************************************
 
 
 //функция создания объектов
-std::unique_ptr<BaseTank> TankFactory::createTnak(eTankType object)
+inline std::unique_ptr<BaseTank> TankFactory::createTank(eTankType object)
 {
 	switch (object)
 	{
@@ -52,5 +51,5 @@ std::unique_ptr<BaseTank> TankFactory::createTnak(eTankType object)
 	case eTankType::T34_USSR:
 		return std::make_unique<T34ussr>();
 	}
-	return 0;
+	return {};
 }

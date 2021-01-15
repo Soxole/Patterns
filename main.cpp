@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+//#define _CRT_SECURE_NO_WARNINGS
 #include <iomanip>
 #include <iostream>
 #include <memory>
@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 #include "cor_01.h"
-#include "command_02.h"
+#include "iterator_01.h"
 /*
 #include "decorater_01.h"
 #include "Composite.h"
@@ -114,19 +114,33 @@ void client_code2(unique_ptr<IComponent> &component1, unique_ptr<IComponent> &co
 }
 */
 
-
-
-//auto foo(const auto &x)
-//{
-//	return x;
-//}
-//auto bar(auto &&x) {
-//	return foo(forward<decltype(x)>(x));
-//}
+bool operator == (const Stack &left_stack, const Stack &right_stack)
+{
+	StackIter it_l(left_stack), it_r(right_stack);
+	for (; it_l(); ++it_l, ++it_r)
+	{
+		if (*it_l != *it_r)
+			break;
+	}
+	return !it_l() && !it_r();
+}
 
 int main()
 {
-
+	Stack st1;
+	for (int i = 1; i < 5; ++i)
+	{
+		st1.push(i);
+	}
+	Stack s2(st1), s3(st1), s4(st1), s5(st1);
+	s3.pop();
+	s5.pop();
+	s4.push(2);
+	s5.push(9);
+	cout << "1 == 2 is " << (st1 == s2) << endl;
+	cout << "1 == 3 is " << (st1 == s3) << endl;
+	cout << "1 == 4 is " << (st1 == s4) << endl;
+	cout << "1 == 5 is " << (st1 == s5) << endl;
 
 	/*
 	unique_ptr<IComponent> simple{ make_unique<Leaf>() };

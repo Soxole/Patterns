@@ -48,7 +48,7 @@ class Creator
 {
 public:
 	virtual ~Creator() = default;
-	virtual std::unique_ptr<I_Product> factoryMethod() const = 0;
+	[[nodiscard]] virtual std::unique_ptr<I_Product> factoryMethod() const = 0;
 
 	[[nodiscard]] std::string someOperation() const
 	{

@@ -52,6 +52,9 @@
     <Filter Include="Файлы ресурсов\Command">
       <UniqueIdentifier>{a5b68c97-48ad-4645-a151-7cb514b03131}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы ресурсов\Iterator">
+      <UniqueIdentifier>{f7d8ba94-5b69-4038-9498-9ae5ebe21776}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FMethod.h">
@@ -140,6 +143,9 @@
     </ClInclude>
     <ClInclude Include="command_02.h">
       <Filter>Файлы ресурсов\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="iterator_01.h">
+      <Filter>Файлы ресурсов\Iterator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

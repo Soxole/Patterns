@@ -185,6 +185,8 @@
     <ClInclude Include="f_method_03.h" />
     <ClInclude Include="f_method_02.h" />
     <ClInclude Include="iterator_01.h" />
+    <ClInclude Include="mediator_01.h" />
+    <ClInclude Include="memento_01.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="Prototype_01.h" />
     <ClInclude Include="Prototype_02.h" />

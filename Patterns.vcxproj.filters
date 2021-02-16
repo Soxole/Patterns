@@ -55,6 +55,12 @@
     <Filter Include="Файлы ресурсов\Iterator">
       <UniqueIdentifier>{f7d8ba94-5b69-4038-9498-9ae5ebe21776}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы ресурсов\Mediator">
+      <UniqueIdentifier>{b006db34-df1b-4dee-b01a-7cb9d2180a57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы ресурсов\Memento">
+      <UniqueIdentifier>{d93827fe-8fd1-488d-8857-e27e341bef66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FMethod.h">
@@ -146,6 +152,12 @@
     </ClInclude>
     <ClInclude Include="iterator_01.h">
       <Filter>Файлы ресурсов\Iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mediator_01.h">
+      <Filter>Файлы ресурсов\Mediator</Filter>
+    </ClInclude>
+    <ClInclude Include="memento_01.h">
+      <Filter>Файлы ресурсов\Memento</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

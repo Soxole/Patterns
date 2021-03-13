@@ -187,12 +187,14 @@
     <ClInclude Include="iterator_01.h" />
     <ClInclude Include="mediator_01.h" />
     <ClInclude Include="memento_01.h" />
+    <ClInclude Include="observer_01.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="Prototype_01.h" />
     <ClInclude Include="Prototype_02.h" />
     <ClInclude Include="proxy_01.h" />
     <ClInclude Include="Singletone.h" />
     <ClInclude Include="singletone_02.h" />
+    <ClInclude Include="singletone_03.h" />
     <ClInclude Include="Stack_temp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

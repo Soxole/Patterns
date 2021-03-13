@@ -6,10 +6,11 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include "mediator_01.h"
+/*
+#include "observer_01.h"
 #include "cor_01.h"
 #include "memento_01.h"
-/*
-#include "mediator_01.h"
 #include "iterator_01.h"
 #include "decorater_01.h"
 #include "Composite.h"
@@ -118,11 +119,26 @@ void client_code2(unique_ptr<IComponent> &component1, unique_ptr<IComponent> &co
 
 
 
+ void clientCode()
+{
+	auto component_1 = make_shared<Component_1>();
+	auto component_2 = make_shared<Component_2>();
+	auto concreteMediator = make_shared<ConcreteMediator>();
+ 	concreteMediator->set_component_1(component_1);
+	concreteMediator->set_component_2(component_2);
 
+ 	
+	std::cout << "Client triggers operation A.\n";
+	component_1->make_up_A();
+	std::cout << "\n";
+	std::cout << "Client triggers operation D.\n";
+	component_2->make_up_D();
+	
+}
 
 int main() noexcept
 {
-
+	clientCode();
 	
 
 	/*

@@ -61,6 +61,9 @@
     <Filter Include="Файлы ресурсов\Memento">
       <UniqueIdentifier>{d93827fe-8fd1-488d-8857-e27e341bef66}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы ресурсов\Observer">
+      <UniqueIdentifier>{221d05bf-00cc-4783-844f-35a5e3111ec3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FMethod.h">
@@ -158,6 +161,12 @@
     </ClInclude>
     <ClInclude Include="memento_01.h">
       <Filter>Файлы ресурсов\Memento</Filter>
+    </ClInclude>
+    <ClInclude Include="observer_01.h">
+      <Filter>Файлы ресурсов\Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="singletone_03.h">
+      <Filter>Файлы ресурсов\Singletone</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

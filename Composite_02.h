@@ -5,6 +5,9 @@
 
 using namespace std;
 
+
+//TITLE: composite_02
+//TODO  composite_02 dont work
 class IComponent
 {
 public:
@@ -33,17 +36,17 @@ class Composite final : public IComponent
 public:
 	void add(unique_ptr<IComponent> element)
 	{
-		m_children.emplace_back(move(element));
+		m_children_.emplace_back(move(element));
 	}
 	void traverse() const override
 	{
-		for (auto &&component : m_children)
+		for (auto &&component : m_children_)
 		{
 			cout << component << " ";
 		}
 	}
 private:
-	vector<unique_ptr<IComponent>> m_children;
+	vector<unique_ptr<IComponent>> m_children_;
 	
 };
 

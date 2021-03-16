@@ -4,6 +4,8 @@
 #include <string>
 
 using namespace std;
+//TODO: pattern composite; incorrect working 
+
 /*
 Применимость: Паттерн Компоновщик встречается в любых задачах, которые связаны с построением дерева.
 Самый простой пример — составные элементы GUI, которые тоже можно рассматривать как дерево.
@@ -18,19 +20,20 @@ public:
 	virtual ~IComponent() = default;
 
 	//setter
-	void setParent(unique_ptr<IComponent> parent)
+	void setParent(shared_ptr<IComponent> parent)
 	{
-		m_parent = move(parent);
+		m_parent_ = parent;
 	}
-	//getter
-	[[nodiscard]] unique_ptr<IComponent> getParent() const 
+	//getter; unused
+	[[nodiscard]] shared_ptr<IComponent> getParent() const
 	{
-		return make_unique<IComponent>();
+		return make_shared<IComponent>();
 	}
+	
 	//empty methods 
-	[[maybe_unused]] virtual void addComp(unique_ptr<IComponent> component)
+	[[maybe_unused]] virtual void addComp(shared_ptr<IComponent> component)
 	{}
-	[[maybe_unused]] virtual void removeComp(unique_ptr<IComponent> component)
+	[[maybe_unused]] virtual void removeComp(shared_ptr<IComponent> component)
 	{}
 
 	[[nodiscard]] virtual bool isComposite() const {
@@ -42,7 +45,7 @@ public:
 	}
 
 protected:
-	unique_ptr<IComponent> m_parent;
+	weak_ptr<IComponent> m_parent_; //weak_ptr
 };
 /*
  * Класс Лист представляет собой конечные объекты структуры. Лист не может иметь
@@ -55,7 +58,7 @@ protected:
 class Leaf : public IComponent
 {
 public:
-	[[nodiscard]] string operation() const override 
+	[[nodiscard]] string operation() const override
 	{
 		return "leaf";
 	}
@@ -67,18 +70,18 @@ public:
  * детям, а затем «суммируют» результат.
  */
 
-class Composite final : public IComponent
+class Composite final : public IComponent, public std::enable_shared_from_this<Composite>
 {
 public:
-	void addComp(unique_ptr<IComponent> component) override 
+	void addComp(shared_ptr<IComponent> component) override
 	{
-		component->setParent(make_unique<Leaf>());
-		m_children.push_back(move(component));
+		m_children_.emplace_back(component);
+		component->setParent(shared_from_this());	//this
 	}
 
-	void removeComp(unique_ptr<IComponent> component) override 
+	void removeComp(shared_ptr<IComponent> component) override
 	{
-		m_children.remove(component);
+		m_children_.remove(component);
 		component->setParent(nullptr);
 	}
 
@@ -86,13 +89,11 @@ public:
 	{
 		string result;
 
-		for (const auto &component : m_children) {
-			if (component == m_children.back())
+		for (const auto &component : m_children_) {
+			if (component == m_children_.back())
 			{
 				result += component->operation();
-			}
-			else
-			{
+			}else{
 				result += component->operation() + " + ";
 			}
 		}
@@ -100,7 +101,7 @@ public:
 	}
 
 protected:
-	list <unique_ptr<IComponent>> m_children;
+	list<shared_ptr<IComponent>> m_children_;
 };
 
 /*
@@ -108,7 +109,7 @@ protected:
  * Благодаря тому, что операции управления потомками объявлены в базовом классе
  * Компонента, клиентский код может работать как с простыми, так и со сложными
  * компонентами, вне зависимости от их конкретных классов.
- 
+
 
 void client_code(const unique_ptr<IComponent> &component) {
 

@@ -341,3 +341,4 @@ healthchecksdb
 /Patterns.sln
 /Patterns.vcxproj
 /Patterns.vcxproj.filters
+*.plog

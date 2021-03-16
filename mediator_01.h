@@ -99,15 +99,18 @@ public:
 	//	
 	//}
 	
-	void set_component_1(std::shared_ptr<Component_1> sp)
+	void set_component_1(std::shared_ptr<Component_1> component_1)
 	{
-		m_component_1_ = std::move(sp);
-		this->m_component_1_->set_mediator(shared_from_this());
+		//std::cout << m_component_1_.use_count() << '\n';	//0
+		m_component_1_ = std::move(component_1);
+		//std::cout << m_component_1_.use_count() << '\n';	//2
+		//std::cout << "------------" << '\n';
+		m_component_1_->set_mediator(shared_from_this());
 	}
 
-	void set_component_2(std::shared_ptr<Component_2> sp2)
+	void set_component_2(std::shared_ptr<Component_2> component_2)
 	{
-		m_component_2_ = std::move(sp2);
+		m_component_2_ = std::move(component_2);
 		m_component_2_->set_mediator(shared_from_this());
 	}
 

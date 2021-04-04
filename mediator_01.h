@@ -16,7 +16,7 @@ public:
     virtual void notify(std::shared_ptr<BaseComponent> sender, std::string event) = 0;
 };
 
-//It's saved a weak pointer to Mediator
+//It's stored a weak pointer to Mediator
 class BaseComponent
 {
 public:
@@ -77,7 +77,7 @@ public:
     }
 };
 
-//It's saved 2 shared pointers to Component_1 and Component_2
+//It's stored 2 shared pointers to Component_1 and Component_2
 class ConcreteMediator : public Mediator, public std::enable_shared_from_this<ConcreteMediator>
 {
 public:
@@ -86,13 +86,13 @@ public:
     void set_component_1(std::shared_ptr<Component_1> component_1)
     {
         m_component_1_ = std::move(component_1);
-        m_component_1_->set_mediator(shared_from_this());
+        m_component_1_->set_mediator(shared_from_this()); //this
     }
 
     void set_component_2(std::shared_ptr<Component_2> component_2)
     {
         m_component_2_ = std::move(component_2);
-        m_component_2_->set_mediator(shared_from_this());
+        m_component_2_->set_mediator(shared_from_this()); //this
     }
 
     void notify(std::shared_ptr<BaseComponent> sender, const std::string event) override

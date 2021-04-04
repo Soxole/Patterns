@@ -3,7 +3,6 @@
 #include <iostream>
 #include <list>
 #include <memory>
-#include <iterator>
 
 /**
  * TITLE: Паттерн Наблюдатель

@@ -13,7 +13,7 @@
 
 class Context;
 
-//state is saved a smart pointer to <Context>
+//class State is stored a smart pointer to <Context> 
 class State
 {
 protected:
@@ -31,7 +31,7 @@ public:
 	}
 };
 
-//context is stored a smart pointer to <State>
+//class Context is stored a smart pointer to <State>
 class Context : public std::enable_shared_from_this<Context>
 {
 private:
@@ -43,7 +43,7 @@ public:
 
 	void transition_to(const std::shared_ptr<State> &state)
 	{
-		std::cout << "Context: transition to " << typeid(*state).name() << ".\n";
+		std::cout << "Context: transition to " << typeid(*state).name() << ".\n"; //typeid.name()
 		m_state_ = state;
 		m_state_->set_context(shared_from_this()); //this
 	}
@@ -58,7 +58,7 @@ public:
 	}
 };
 
-//state A creates the state B through the call m_context_->transition_to
+//State A creates the state B through the call m_context_->transition_to
 class ConcreteState_A : public State
 {
 public:
@@ -70,7 +70,7 @@ public:
 		std::cout << "ConcreteStateA handles request2.\n";
 	}
 };
-//state B creates the state A through the call m_context_->transition_to
+//State B creates the state A through the call m_context_->transition_to
 class ConcreteState_B : public State
 {
 public:

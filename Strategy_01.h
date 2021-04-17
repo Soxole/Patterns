@@ -39,8 +39,8 @@ public:
 	void do_some_business_logic() const
 	{
 		std::cout << "Context: Sorting data using the strategy (not sure how it'll do it)\n";
-		const std::string result  = strategy_->do_algorithm(std::vector<std::string>{"a", "e", "c", "b", "d"});
-		std::cout << result << '\n';
+		std::cout << strategy_->do_algorithm(std::vector<std::string>{"a", "e", "c", "b", "d"});
+		//std::cout << result << '\n';
 	}
 };
 
@@ -68,11 +68,13 @@ public:
 		std::string result;
 		std::for_each(std::begin(data), std::end(data), 
 			[&result](const auto &letter){result.append(letter);});
+		
 		std::sort(std::begin(result), std::end(result));
-		for (size_t i = 0; i < result.length() / 2; ++i)
-		{
-			std::swap(result[i], result[result.length() - i - 1]);
-		}
+		std::reverse(result.begin(), result.end());		
+		//for (size_t i = 0; i < result.length() / 2; ++i)
+		//{
+		//	std::swap(result[i], result[result.length() - i - 1]);
+		//}
 		return result;
 	}
 };

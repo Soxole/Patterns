@@ -43,14 +43,16 @@ public:
     void make_up_A()
     {
         std::cout << "Component_1 make up A.\n";
-        auto tmp = m_mediator_.lock();
+        //lock() возвращает nullptr(shared_ptr, в котором он содержит nullptr), если объект уже удалили; если нет, то возвращает std::shared_ptr на этот объект
+        auto tmp = m_mediator_.lock(); 
         if (tmp)
             tmp->notify(shared_from_this(), "A"); //this
     }
     void make_up_B()
     {
         std::cout << "Component_1 make up B.\n";
-        auto tmp = m_mediator_.lock();
+        //lock() возвращает nullptr(shared_ptr, в котором он содержит nullptr), если объект уже удалили; если нет, то возвращает std::shared_ptr на этот объект
+        auto tmp = m_mediator_.lock(); 
         if (tmp)
             tmp->notify(shared_from_this(), "B"); //this
     }

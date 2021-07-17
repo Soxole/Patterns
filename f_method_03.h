@@ -1,18 +1,17 @@
 #pragma once
 #include <iostream>
-#include <vector>
 #include <memory>
 
 using std::cout;
 using std::endl;
 
 
-// Иерархия классов игровых персонажей
+// Product
 class Warrior
 {
 public:
-	virtual void info() const = 0;
 	virtual ~Warrior() {}
+	virtual void info() const = 0;
 };
 
 class Infantryman : public Warrior
@@ -21,7 +20,7 @@ public:
 	void info() const override
 	{
 		cout << "Infantryman" << endl;
-	};
+	}
 };
 
 class Archer : public Warrior
@@ -30,7 +29,7 @@ public:
 	void info() const override
 	{
 		cout << "Archer" << endl;
-	};
+	}
 };
 
 class Horseman final : public Warrior
@@ -39,16 +38,16 @@ public:
 	void info() const override
 	{
 		cout << "Horseman" << endl;
-	};
+	}
 };
 
 
-// Фабрики объектов
+// Factory
 class Factory
 {
 public:
-	virtual std::unique_ptr<Warrior> createWarrior() = 0;
 	virtual ~Factory() {}
+	virtual std::unique_ptr<Warrior> createWarrior() = 0;
 };
 
 class InfantryFactory : public Factory
@@ -79,7 +78,6 @@ public:
 };
 
 /*
-
 	vector<unique_ptr<Warrior>> warriors;
 
 	unique_ptr<Factory> infantry_factory{ make_unique<InfantryFactory>() };
@@ -89,9 +87,5 @@ public:
 
 	for (const auto &it : warriors)
 		it->info();
-
-
-
-
 
 */

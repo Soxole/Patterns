@@ -1,23 +1,24 @@
 #pragma once
 #include <iostream>
 #include <memory>
-#include <vector>
 
-//Паттерн Builder определяет процесс поэтапного конструирования сложного объекта,
-//в результате которого могут получаться разные представления этого объекта.
+//РЎС‚СЂРѕРёС‚РµР»СЊ вЂ” СЌС‚Рѕ РїРѕСЂРѕР¶РґР°СЋС‰РёР№ РїР°С‚С‚РµСЂРЅ РїСЂРѕРµРєС‚РёСЂРѕРІР°РЅРёСЏ, РєРѕС‚РѕСЂС‹Р№ РїРѕР·РІРѕР»СЏРµС‚ СЃРѕР·РґР°РІР°С‚СЊ СЃР»РѕР¶РЅС‹Рµ РѕР±СЉРµРєС‚С‹ РїРѕС€Р°РіРѕРІРѕ.
+//РЎС‚СЂРѕРёС‚РµР»СЊ РґР°С‘С‚ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РѕРґРёРЅ Рё С‚РѕС‚ Р¶Рµ РєРѕРґ СЃС‚СЂРѕРёС‚РµР»СЊСЃС‚РІР° РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СЂР°Р·РЅС‹С… РїСЂРµРґСЃС‚Р°РІР»РµРЅРёР№ РѕР±СЉРµРєС‚РѕРІ.
 
-
+//РЅР° Р»РёРЅСѓРєСЃРµ РёРјРµСЋС‚СЃСЏ РІРѕСЂРЅРёРЅРіРё РЅР° Margherita_ConcreteBuilder Рё Spicy_ConcreteBuilder
+//return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); this call could return NULL
 
 using std::cout;
 using std::endl;
 
-class Pizza_Product
+//Product
+class Pizza_Product final
 {
 public:
 	~Pizza_Product() = default;
-	void setDough(const std::string &dough) { m_dough = dough; }
-	void setSauce(const std::string &sauce) { m_sauce = sauce; }
-	void setTopping(const std::string &topping) { m_topping = topping; }
+	void setDough(const std::string_view dough) { m_dough = dough; }
+	void setSauce(const std::string_view sauce) { m_sauce = sauce; }
+	void setTopping(const std::string_view topping) { m_topping = topping; }
 
 	void taste() const
 	{
@@ -31,16 +32,18 @@ private:
 	std::string m_sauce;
 	std::string m_topping;
 };
-//////////////////////////////////////////////////////////////////////////////////
+
+//Builder
 class Pizza_Builder
 {
 public:
 	virtual ~Pizza_Builder() = default;
 
-	[[nodiscard]] Pizza_Product *getPizza()
+	[[nodiscard]] std::unique_ptr<Pizza_Product> getPizza()
 	{
-		return m_pizza.release();
+		return std::move(m_pizza);
 	}
+	//for dir
 	void createNewPizza()
 	{
 		m_pizza = std::make_unique<Pizza_Product>();
@@ -51,29 +54,30 @@ public:
 	virtual void buildTop() const = 0;
 
 protected:
-	std::unique_ptr<Pizza_Product> m_pizza;
+	std::unique_ptr<Pizza_Product> m_pizza{};
 };
-////////////////////////////////////////////////////////////////////////////////
 
-//конкретные строители
-class Margherita_ConcreteBuilder : public Pizza_Builder
+
+//Concrete builder
+class Margherita_ConcreteBuilder final : public Pizza_Builder
 {
 public:
 	void buildDough() const override { m_pizza->setDough("cross"); }
 	void buildSauce() const override { m_pizza->setSauce("tomato"); }
-	void buildTop() const override { m_pizza->setTopping("mazzarela + basil"); }
+	void buildTop() const override { m_pizza->setTopping("mozzarella + basil"); }
 };
 
-class Spicy_ConcreteBuilder : public Pizza_Builder
+class Spicy_ConcreteBuilder final : public Pizza_Builder
 {
 public:
 	void buildDough() const override { m_pizza->setDough("pan baked"); }
 	void buildSauce() const override { m_pizza->setSauce("tomato + chilli"); }
 	void buildTop() const override { m_pizza->setTopping("pepperoni + salami"); }
 };
-//////////////////////////////////////////////////////////////////////////////////
 
-class Cook_Director
+//Director
+//class is complete a pizza
+class Cook_Director final
 {
 public:
 	void tastePizza() const
@@ -81,29 +85,33 @@ public:
 		m_pizzaBuilder->getPizza()->taste();
 	}
 
-	void makePizza(Pizza_Builder *pb)
+	void makePizza(std::unique_ptr<Pizza_Builder> pb)
 	{
-		m_pizzaBuilder = pb;
+		m_pizzaBuilder = std::move(pb);
 		m_pizzaBuilder->createNewPizza();
 		m_pizzaBuilder->buildDough();
 		m_pizzaBuilder->buildSauce();
 		m_pizzaBuilder->buildTop();
 	}
 private:
-	Pizza_Builder *m_pizzaBuilder;
-	//std::unique_ptr<Pizza_Builder> m_pizzaBuilder;
+	std::unique_ptr<Pizza_Builder> m_pizzaBuilder;
 };
 
 
 /*
-	Cook_Director dir{};
-	Margherita_ConcreteBuilder pizzaMargherita;
-	Spicy_ConcreteBuilder pizzaSpicy;
+	auto dir = std::make_unique<Cook_Director>(Cook_Director{});
 
-	dir.makePizza(&pizzaMargherita);
-	dir.tastePizza();
+	auto pizzaMargherita = std::make_unique<Margherita_ConcreteBuilder>();
+	auto pizzaSpicy = std::make_unique<Spicy_ConcreteBuilder>();
 
-	dir.makePizza(&pizzaSpicy);
-	dir.tastePizza();
+	dir->makePizza(std::move(pizzaMargherita));
+	dir->tastePizza();
 
+	dir->makePizza(std::move(pizzaSpicy));
+	dir->tastePizza();
+
+
+	output:
+	Pizza with cross dough, tomato sauce and mazzarela + basil topping. Mmmmmmm.
+	Pizza with pan baked dough, tomato + chilli sauce and pepperoni + salami topping. Mmmmmmm.
 */

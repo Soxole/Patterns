@@ -1,61 +1,58 @@
 #pragma once
 #include <string>
 #include <memory>
+#include <iostream>
+
+
+//TITLE_: Fabric_method
 /*
-Создает объекты разных типов, позволяя системе оставаться независимой как от самого процесса создания, 
-так и от типов создаваемых объектов.
-
-Фабричный метод — это порождающий паттерн проектирования, который определяет
-общий интерфейс для создания объектов в суперклассе, позволяя подклассам изменять тип создаваемых объектов.
-В системе часто требуется создавать объекты самых разных типов.Паттерн Factory Method(фабричный метод)
-может быть полезным в решении следующих задач :
-
-Система должна оставаться расширяемой путем добавления объектов новых типов.Непосредственное использование
-выражения new является нежелательным, так как в этом случае код создания объектов с указанием конкретных типов 
-может получиться разбросанным по всему приложению.Тогда такие операции как добавление в систему объектов новых 
-типов или замена объектов одного типа на другой будут затруднительными(подробнее в разделе Порождающие паттерны).
-Паттерн Factory Method позволяет системе оставаться независимой как от самого процесса порождения объектов, так и от их типов.
-Заранее известно, когда нужно создавать объект, но неизвестен его тип.
+Р¤Р°Р±СЂРёС‡РЅС‹Р№ РјРµС‚РѕРґ вЂ” СЌС‚Рѕ РїРѕСЂРѕР¶РґР°СЋС‰РёР№ РїР°С‚С‚РµСЂРЅ РїСЂРѕРµРєС‚РёСЂРѕРІР°РЅРёСЏ, РєРѕС‚РѕСЂС‹Р№ СЂРµС€Р°РµС‚ РїСЂРѕР±Р»РµРјСѓ СЃРѕР·РґР°РЅРёСЏ СЂР°Р·Р»РёС‡РЅС‹С… РїСЂРѕРґСѓРєС‚РѕРІ,
+Р±РµР· СѓРєР°Р·Р°РЅРёСЏ РєРѕРЅРєСЂРµС‚РЅС‹С… РєР»Р°СЃСЃРѕРІ РїСЂРѕРґСѓРєС‚РѕРІ.
+Р¤Р°Р±СЂРёС‡РЅС‹Р№ РјРµС‚РѕРґ Р·Р°РґР°С‘С‚ РјРµС‚РѕРґ, РєРѕС‚РѕСЂС‹Р№ СЃР»РµРґСѓРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РІРјРµСЃС‚Рѕ РІС‹Р·РѕРІР° РѕРїРµСЂР°С‚РѕСЂР° new РґР»СЏ СЃРѕР·РґР°РЅРёСЏ РѕР±СЉРµРєС‚РѕРІ-РїСЂРѕРґСѓРєС‚РѕРІ.
+РџРѕРґРєР»Р°СЃСЃС‹ РјРѕРіСѓС‚ РїРµСЂРµРѕРїСЂРµРґРµР»РёС‚СЊ СЌС‚РѕС‚ РјРµС‚РѕРґ, С‡С‚РѕР±С‹ РёР·РјРµРЅСЏС‚СЊ С‚РёРї СЃРѕР·РґР°РІР°РµРјС‹С… РїСЂРѕРґСѓРєС‚РѕРІ.
 */
+
+using namespace std::string_literals;
 
 class I_Product
 {
 public:
 	virtual ~I_Product() = default;
-	virtual std::string lineOperation() const = 0;
+	[[nodiscard]] virtual std::string lineOperation() const = 0;
 };
 
+//product 1
 class ConcreteProduct_1 : public I_Product
 {
 public:
 	[[nodiscard]] std::string lineOperation() const override
 	{
-		return "Result of the ConcreteProduct_1";
+		return "Result of the ConcreteProduct_1"s;
 	}
 };
 
+//product 2
 class ConcreteProduct_2 final : public I_Product
 {
 public:
 	[[nodiscard]] std::string lineOperation() const override
 	{
-		return "Result of the ConcreteProduct_2";
+		return "Result of the ConcreteProduct_2"s;
 	}
 };
 
-//A fabric method
+//Fabric methods
 class Creator
 {
 public:
 	virtual ~Creator() = default;
 	[[nodiscard]] virtual std::unique_ptr<I_Product> factoryMethod() const = 0;
 
-	[[nodiscard]] std::string someOperation() const
+	void someOperation() const
 	{
+		//call the constructor from factoryMethod
 		const auto product = factoryMethod();
-		auto result = "Creator: The same creator's code " + product->lineOperation();
-
-		return result;
+		std::cout << "Creator: The same creator's code "s + product->lineOperation() << '\n';
 	}
 };
 
@@ -78,13 +75,14 @@ public:
 };
 
 /*
- void clientCode(const Creator &creator) {
-	std::cout << "Client: I'm not aware of the creator's class, but it still works.\n"
-		<< creator.someOperation() << std::endl;
+void clientCode(std::unique_ptr<Creator> const creator) {
+	std::cout << "Client: I'm not aware of the creator's class, but it still works.\n";
+	creator->someOperation();
 }
 
-	const unique_ptr<Creator> creator{ make_unique<ConcreteCreator_1>() };
-	clientCode(*creator);
-	const unique_ptr<Creator> creatorTwo{ make_unique<ConcreteCreator_1>() };
-	clientCode(*creatorTwo);
+	std::unique_ptr<Creator> creator{ std::make_unique<ConcreteCreator_1>() };
+	clientCode(std::move(creator));
+	std::unique_ptr<Creator> creator_two{ std::make_unique<ConcreteCreator_2>() };
+	clientCode(std::move(creator_two));
+
 */

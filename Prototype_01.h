@@ -4,13 +4,8 @@
 #include <unordered_map>
 #include <memory>
 
-// Паттерн Прототип
-//
-// Назначение: Позволяет копировать объекты, не вдаваясь в подробности их реализации.
-
 using std::string;
 using std::cout;
-using std::endl;
 using std::unique_ptr;
 using std::make_unique;
 
@@ -21,10 +16,6 @@ enum class Type : size_t
 	PROTOTYPE_2
 };
 
-/**
- * Пример класса, имеющего возможность клонирования. Мы посмотрим как происходит
- * клонирование значений полей разных типов.
- */
 
 class Prototype {
 public:
@@ -75,7 +66,7 @@ public:
 		return std::make_unique<ConcretePrototype1>(*this);
 	}
 private:
-	[[maybe_unused]] float concrete_prototype_field1_{0.f};
+	[[maybe_unused]] float concrete_prototype_field1_{.0f};
 
 };
 
@@ -91,7 +82,7 @@ public:
 		return std::make_unique<ConcretePrototype2>(*this);
 	}
 private:
-	[[maybe_unused]] float concrete_prototype_field2_{0.f};
+	[[maybe_unused]] float concrete_prototype_field2_{.0f};
 
 };
 /*

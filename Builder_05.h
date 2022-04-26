@@ -9,22 +9,22 @@ struct Base
 	int price;
 };
 
-struct Wheel : Base
+struct Wheel final : Base
 {
 	int size;
 };
 
-struct Engine : Base
+struct Engine final : Base
 {
 	int power;
 };
 
-struct Body : Base
+struct Body final : Base
 {
 	std::string type;
 };
 
-struct Car
+struct Car final
 {
 	void print_info()
 	{
@@ -48,15 +48,14 @@ struct Car
 //interface of the concrete class
 struct Builder
 {
+	virtual ~Builder() = default;
 	virtual std::unique_ptr<Wheel>  make_wheel() = 0;
 	virtual std::unique_ptr<Engine> make_engine() = 0;
 	virtual std::unique_ptr<Body>   make_body() = 0;
-	virtual ~Builder() = default;
 	std::string mName;
 };
 
-
-struct AudiQ7Diesel : Builder
+struct AudiQ7Diesel final : Builder
 {
 	AudiQ7Diesel()
 	{
@@ -65,7 +64,7 @@ struct AudiQ7Diesel : Builder
 
 	std::unique_ptr<Wheel> make_wheel() override
 	{
-		std::unique_ptr<Wheel> wheel = std::make_unique<Wheel>();
+		auto wheel = std::make_unique<Wheel>();
 		wheel->price = 100;
 		wheel->size = 19;
 		return wheel;
@@ -73,7 +72,7 @@ struct AudiQ7Diesel : Builder
 
 	std::unique_ptr<Engine> make_engine() override
 	{
-		std::unique_ptr<Engine> engine = std::make_unique<Engine>();
+		auto engine = std::make_unique<Engine>();
 		engine->price = 2000;
 		engine->power = 500;
 		return engine;
@@ -81,15 +80,15 @@ struct AudiQ7Diesel : Builder
 
 	std::unique_ptr<Body> make_body() override
 	{
-		std::unique_ptr<Body> body = std::make_unique<Body>();
+		auto body = std::make_unique<Body>();
 		body->price = 3000;
 		body->type = "SUV";
 		return body;
 	}
-	virtual ~AudiQ7Diesel() override = default;
+	~AudiQ7Diesel() override = default;
 };
 
-struct AudiTTGasoline : Builder
+struct AudiTTGasoline final : Builder
 {
 	AudiTTGasoline()
 	{
@@ -121,7 +120,7 @@ struct AudiTTGasoline : Builder
 	}
 };
 
-struct Director
+struct Director final
 {
 	void setBuilder(std::unique_ptr<Builder> aBuilder)
 	{
@@ -146,17 +145,20 @@ struct Director
 	std::unique_ptr<Builder> mBuilder;
 };
 
-//Director director;
-//director.setBuilder(std::make_unique<AudiQ7Diesel>());
-//
-//std::unique_ptr<Car> audiQ7(std::make_unique<Car>());
-//audiQ7 = director.makeCar();
-//audiQ7->print_info();
-//
-//std::cout << std::endl;
-//std::cout << std::endl;
-//
-//director.setBuilder(std::make_unique<AudiTTGasoline>());
-//std::unique_ptr<Car> audiTT(std::make_unique<Car>());
-//audiTT = director.makeCar();
-//audiTT->print_info();
+//main()
+#if 0
+Director director;
+director.setBuilder(std::make_unique<AudiQ7Diesel>());
+
+std::unique_ptr<Car> audiQ7(std::make_unique<Car>());
+audiQ7 = director.makeCar();
+audiQ7->print_info();
+
+std::cout << std::endl;
+std::cout << std::endl;
+
+director.setBuilder(std::make_unique<AudiTTGasoline>());
+std::unique_ptr<Car> audiTT(std::make_unique<Car>());
+audiTT = director.makeCar();
+audiTT->print_info();
+#endif

@@ -343,3 +343,5 @@ healthchecksdb
 /Patterns.vcxproj.filters
 *.plog
 /ClassDiagramFor_f_method_02.cd
+/main.h
+/main.cpp

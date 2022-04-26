@@ -55,7 +55,6 @@ struct Builder
 	std::string mName;
 };
 
-
 struct AudiQ7Diesel final : Builder
 {
 	AudiQ7Diesel()

@@ -78,10 +78,12 @@ public:
 };
 
 /*
-	vector<unique_ptr<Warrior>> warriors;
+	--main()
+	
+	std::vector<std::unique_ptr<Warrior>> warriors;
 
-	unique_ptr<Factory> infantry_factory{ make_unique<InfantryFactory>() };
-	unique_ptr<Factory> archers_factory{make_unique<ArchersFactory>()};
+	std::unique_ptr<Factory> infantry_factory{ std::make_unique<InfantryFactory>() };
+	std::unique_ptr<Factory> archers_factory{std::make_unique<ArchersFactory>()};
 	warriors.emplace_back(infantry_factory->createWarrior());
 	warriors.emplace_back(archers_factory->createWarrior());
 

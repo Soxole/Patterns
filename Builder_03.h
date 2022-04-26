@@ -1,96 +1,94 @@
 #pragma once
 #include <iostream>
-#include <vector>
 #include <memory>
 #include <string>
 
 
-
-using std::cout;
-using std::endl;
-using std::string;
-using std::unique_ptr;
-using std::make_unique;
-
-
-class House
+class House final
 {
 public:
-	void setWall(const string &wall) { this->wall = wall; }
-	void setWindow(const string &window) { this->window = window; }
-	void setGarage(const string &garage) { this->garage = garage; }
-	void setSwimmingPool(const string &swimmingPool) { this->swimmingPool = swimmingPool; }
+	void setWall(const std::string_view wall) { m_wall_ = wall; }
+	void setWindow(const std::string_view window) { m_window_ = window; }
+	void setGarage(const std::string_view garage) { m_garage_ = garage; }
+	void setSwimmingPool(const std::string_view swimmingPool) { m_swimming_pool_ = swimmingPool; }
 
-	void info() const
-	{
-		cout << "House: " << wall << " " << window << " " << garage << " " << swimmingPool << "\n";
+	void info() const {
+		std::cout << "House: " << m_wall_ << " " << m_window_ << " " << m_garage_ << " " << m_swimming_pool_ << "\n";
 	}
 private:
-	string wall;
-	string window;
-	string garage;
-	string swimmingPool;
-
+	std::string m_wall_;
+	std::string m_window_;
+	std::string m_garage_;
+	std::string m_swimming_pool_;
 };
 
 //builder
-class HouseBiulder
+class House_builder
 {
 public:
-	virtual~HouseBiulder() = default;
+	virtual~House_builder() = default;
 
-	House *getHouse() { return uPtrHouse.release(); }
-	void createNewHouse() { uPtrHouse = make_unique<House>(); }
+	void createNewHouse() { m_house = std::make_unique<House>(); }
+	[[nodiscard]] std::unique_ptr<House> getHouse() { return std::move(m_house); }
 
-	virtual void buildWall() = 0;
-	virtual void builWindow() = 0;
-	virtual void buildGarage() = 0;
-	virtual void buildWSwimmingPool() = 0;
+	virtual void build_wall() = 0;
+	virtual void build_window() = 0;
+	virtual void build_garage() = 0;
+	virtual void build_w_swimming_pool() = 0;
 
 protected:
-	unique_ptr<House> uPtrHouse;
+	std::unique_ptr<House> m_house;
 };
 
-
-
-class HouseWithGarage : public HouseBiulder
+//concrete builder
+class HouseWithGarage final : public House_builder
 {
 public:
-	virtual ~HouseWithGarage() override = default;
-	virtual void buildWall() override { uPtrHouse->setWall("wall"); };
-	virtual void builWindow() override { uPtrHouse->setWindow("window"); };
-	virtual void buildGarage() override { uPtrHouse->setGarage("garage"); };
-	virtual void buildWSwimmingPool() override { uPtrHouse->setSwimmingPool(""); }
+	void build_wall() override { m_house->setWall("wall"); }
+	void build_window() override { m_house->setWindow("window"); }
+	void build_garage() override { m_house->setGarage("garage"); }
+	void build_w_swimming_pool() override {}
 };
 
-class HouseWithSwimmingPool : public HouseBiulder
+//concrete builder
+class HouseWithSwimmingPool final : public House_builder
 {
 public:
-	virtual ~HouseWithSwimmingPool() override = default;
-	virtual void buildWall() override { uPtrHouse->setWall("wall"); };
-	virtual void builWindow() override { uPtrHouse->setWindow("window"); };
-	virtual void buildGarage() override { uPtrHouse->setGarage(""); };
-	virtual void buildWSwimmingPool() override { uPtrHouse->setSwimmingPool("swimming pool"); };
+	void build_wall() override { m_house->setWall("wall"); }
+	void build_window() override { m_house->setWindow("window"); }
+	void build_garage() override { m_house->setSwimmingPool("swimming pool"); }
+	void build_w_swimming_pool() override {}
 };
-
 
 //Director
-class Director
+class Director final
 {
 public:
-	void showHouse() { m_houseCreator->getHouse()->info(); };
+	void showHouse() const { m_house_builder->getHouse()->info(); }
 
-	void createHouse(HouseBiulder *hBuilder)
-	{
-		m_houseCreator = hBuilder;
-		hBuilder->createNewHouse();
-		hBuilder->buildWall();
-		hBuilder->builWindow();
-		hBuilder->buildGarage();
-		hBuilder->buildWSwimmingPool();
+	void createHouse(std::unique_ptr<House_builder> hBuilder) {
+		m_house_builder = std::move(hBuilder);
+		m_house_builder->createNewHouse();
+		m_house_builder->build_wall();
+		m_house_builder->build_window();
+		m_house_builder->build_garage();
+		m_house_builder->build_w_swimming_pool();
 	}
-
 private:
-	HouseBiulder *m_houseCreator;
+	std::unique_ptr<House_builder> m_house_builder;
 };
 
+//main()
+#if 0
+
+auto dir = std::make_unique<Director>();
+auto house_garage = std::make_unique<HouseWithGarage>();
+auto house_swpool = std::make_unique<HouseWithSwimmingPool>();
+
+dir->createHouse(std::move(house_garage));
+dir->showHouse();
+std::cout << std::endl;
+dir->createHouse(std::move(house_swpool));
+dir->showHouse();
+
+#endif

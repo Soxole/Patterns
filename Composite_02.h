@@ -7,7 +7,7 @@ using namespace std;
 
 
 //TITLE: composite_02
-//TODO  composite_02 dont work
+//TODO  composite_02 don't work
 class IComponent
 {
 public:
@@ -52,8 +52,7 @@ private:
 
 
 /*
- *не работает!!!! разобрать!
- *	Composite component[4];
+ 	Composite component[4];
 	for (auto i = 0; i < 4; ++i)
 	{
 		component[i].add(make_unique<Leaf>(i));
@@ -63,5 +62,5 @@ private:
 	{
 		component[j].traverse();
 	}
- * 
+ 
  */

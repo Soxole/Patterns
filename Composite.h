@@ -116,7 +116,7 @@ void client_code(const shared_ptr<IComponent> &component) {
 }
 
 
-void client_code2(shared_ptr<IComponent> &component1, shared_ptr<IComponent> &component2) {
+void client_code2(shared_ptr<IComponent> &&component1, shared_ptr<IComponent> &&component2) {
 
 	if (component1->isComposite()) {
 		component1->addComp(move(component2));
@@ -124,34 +124,37 @@ void client_code2(shared_ptr<IComponent> &component1, shared_ptr<IComponent> &co
 	std::cout << "RESULT: " << component1->operation();
 }
 
+
 int main()
 {
-	shared_ptr<IComponent> tree{ make_shared<Composite>() };
-	shared_ptr<IComponent> simple{ make_shared<Leaf>() };
-	std::cout << "Client: I've got a simple component:\n";
-	client_code(simple);
-	cout << "\n";
+		shared_ptr<IComponent> simple{ make_shared<Leaf>() };
+		std::cout << "Client: I've got a simple component:\n";
+		client_code(simple); //cl_1
+		cout << "\n";
 
-	shared_ptr<IComponent> branch{ make_shared<Composite>() };
-	shared_ptr<IComponent> leaf_1{ make_shared<Leaf>() };
-	shared_ptr<IComponent> leaf_2{ make_shared<Leaf>() };
-	shared_ptr<IComponent> leaf_3{ make_shared<Leaf>() };
+		shared_ptr<IComponent> tree{ make_shared<Composite>() };
+		shared_ptr<IComponent> branch{ make_shared<Composite>() };
+		unique_ptr<IComponent> leaf_1{ make_unique<Leaf>() }; //once using
+		unique_ptr<IComponent> leaf_2{ make_unique<Leaf>() };	//once using
+		unique_ptr<IComponent> leaf_3{ make_unique<Leaf>() };	//once using
 
-	branch->addComp(leaf_1);
-	branch->addComp(leaf_2);
-	shared_ptr<IComponent> branch2{ make_shared<Composite>() };
-	branch2->addComp(leaf_3);
-	tree->addComp(branch);
-	tree->addComp(branch2);
+		branch->addComp(move(leaf_1));
+		branch->addComp(move(leaf_2));
 
-	std::cout << "Client: Now I've got a composite tree:\n";
-	client_code(tree);
-	std::cout << "\n\n";
+		shared_ptr<IComponent> branch2{ make_shared<Composite>() };
 
-	std::cout << "Client: I don't need to check the components classes even when managing the tree:\n";
+		branch2->addComp(move(leaf_3));
+		tree->addComp(move(branch));
+		tree->addComp(move(branch2));
 
-	client_code2(tree, simple);
-	std::cout << "\n";
+		std::cout << "Client: Now I've got a composite tree:\n";
+		client_code(tree);	//cl_1
+		std::cout << "\n\n";
+
+		std::cout << "Client: I don't need to check the components classes even when managing the tree:\n";
+
+		client_code2(move(tree), move(simple));	//cl_1
+		std::cout << "\n";
 }
 
 */

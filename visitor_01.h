@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-//TITLE: Visitor (!memory leak)
+//TITLE: Visitor 
 /*
 Посетитель — это поведенческий паттерн проектирования, который позволяет добавлять в программу новые операции,
 не изменяя классы объектов, над которыми эти операции могут выполняться.
@@ -36,10 +36,10 @@ class ConcreteComponent_a : public Component, public std::enable_shared_from_thi
 public:
 	void accept(Visitor &&visitor) override
 	{
-		std::weak_ptr tmp_concrete_component_a( shared_from_this());	//this ptr
+		std::weak_ptr tmp_concrete_component_a( shared_from_this());	//ptr to this 
 		if (!tmp_concrete_component_a.expired())
 		{
-			visitor.visit_concrete_component_a(std::move(*tmp_concrete_component_a.lock()));
+			visitor.visit_concrete_component_a(*tmp_concrete_component_a.lock());
 		}
 	}
 	// ReSharper disable once CppMemberFunctionMayBeStatic
@@ -55,10 +55,10 @@ class ConcreteComponent_b : public Component, public std::enable_shared_from_thi
 public:
 	void accept(Visitor &&visitor) override
 	{
-		std::weak_ptr tmp_concrete_component_b(shared_from_this());	//this ptr
+		std::weak_ptr tmp_concrete_component_b(shared_from_this());	//ptr to this 
 		if (!tmp_concrete_component_b.expired())
 		{
-			visitor.visit_concrete_component_b(std::move(*tmp_concrete_component_b.lock()));
+			visitor.visit_concrete_component_b(*tmp_concrete_component_b.lock());
 		}
 	}
 	std::string special_method_of_concrete_component_b() const
@@ -109,6 +109,7 @@ void client_code(array<shared_ptr<Component>, number_comp> const &components,
 
 int main()
 {
+	//this record initial of array don't show leaks
 	array<shared_ptr<Component>, number_comp> components;
 	components[0] = make_shared<ConcreteComponent_a>();
 	components[1] = make_shared<ConcreteComponent_b>();

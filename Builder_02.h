@@ -41,7 +41,6 @@ struct Elephant final
 	}
 };
 
-
 class Army final
 {
 public:

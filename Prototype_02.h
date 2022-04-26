@@ -5,8 +5,7 @@
 #include <array>
 
 /*
-Прототип — это порождающий паттерн проектирования, который позволяет копировать объекты, 
-не вдаваясь в подробности их реализации.
+
 
 */
 
@@ -30,11 +29,11 @@ public:
 class Larry : public Stooge
 {
 public:
-	virtual void slap_stick() const override
+	void slap_stick() const override
 	{
 		cout << "class Larry " << endl;
 	}
-	[[nodiscard]] virtual unique_ptr<Stooge> clone() const noexcept override
+	[[nodiscard]] unique_ptr<Stooge> clone() const noexcept override
 	{
 		return make_unique<Larry>();
 	}
@@ -44,27 +43,27 @@ public:
 class Moe final : public Stooge
 {
 public:
-	virtual void slap_stick() const override
+	void slap_stick() const override
 	{
 		cout << "class Moe " << endl;
 	}
-	[[nodiscard]] virtual unique_ptr<Stooge> clone() const noexcept override
+	[[nodiscard]] unique_ptr<Stooge> clone() const noexcept override
 	{
 		return make_unique<Moe>();
 	}
 };
 
-//фабрика 
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
 class Factory
 {
 public:
-	[[nodiscard]] static inline unique_ptr<Stooge> make_stooge(int choice)
+	[[nodiscard]] static unique_ptr<Stooge> make_stooge(int choice)
 	{
 		return s_prototypes[choice]->clone();
 	}
 protected:
-	static inline const size_t amountPtrDerivedClass = 3;			//сумма указателей производных классов Larry, Moe
-	static inline std::array<unique_ptr<Stooge>, amountPtrDerivedClass> s_prototypes = {		//using std::array<> !!!с вектором при завершении удаляются ссылки
+	static inline const size_t amountPtrDerivedClass = 3;			//СЃСѓРјРјР° СѓРєР°Р·Р°С‚РµР»РµР№ РїСЂРѕРёР·РІРѕРґРЅС‹С… РєР»Р°СЃСЃРѕРІ Larry, Moe
+	static inline std::array<unique_ptr<Stooge>, amountPtrDerivedClass> s_prototypes = {		//using std::array<> !!!
 		nullptr, make_unique<Larry>(), make_unique<Moe>()
 	};
 };
@@ -78,8 +77,8 @@ protected:
 
 		auto objLarry = Factory::make_stooge(1);
 		auto objMoe = Factory::make_stooge(2);
-		vecProt.emplace_back(move(objMoe));						<--обязательный std::move(), при добавлении указателя в вектор указателей
-		vecProt.emplace_back(move(Factory::make_stooge(2)));	// при добавлении похожего объекта лучше вызвать метов напрямую
+		vecProt.emplace_back(move(objMoe));						<--пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ std::move(), пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+		vecProt.emplace_back(move(Factory::make_stooge(2)));	// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		vecProt.emplace_back(move(objLarry));
 
 		for (const auto &it : vecProt)

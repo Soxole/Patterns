@@ -18,7 +18,7 @@ public:
 	{
 		return m_line;
 	}
-	[[nodiscard]] static inline std::unique_ptr<Singletone> getInstance(const std::string &line)
+	[[nodiscard]] static std::unique_ptr<Singletone> getInstance(const std::string &line)
 	{
 		std::lock_guard<std::mutex> lock(m_mutex);
 		if (m_pInstance == nullptr)

@@ -1,8 +1,16 @@
 //checking leaks
-
 #include "windows.h"
 #define _CRTDBG_MAP_ALLOC //to get more details
 #include <crtdbg.h>   //for malloc and free
+#include <thread>
+#include <vector>
+#include <chrono>
+#include <iostream>
+
+#include "Adapter_02.h"
+
+
+
 
 int main() {
     _CrtMemState sOld;
@@ -10,7 +18,6 @@ int main() {
     _CrtMemState sDiff;
     _CrtMemCheckpoint(&sOld); //take a snapshot
 
- 
 
 
 

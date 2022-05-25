@@ -91,7 +91,7 @@ class ArmyBuilder
 {
 public:
 	virtual ~ArmyBuilder() = default;
-
+	
 	void createArmy() { m_army = std::make_unique<Army>(); }
 	[[nodiscard]] std::unique_ptr<Army> getArmy() { return std::move(m_army); }
 
@@ -139,14 +139,14 @@ public:
 		m_army_builder->buildElephant();
 	}
 	//for custom army
-	void createInfArchHors(std::unique_ptr<ArmyBuilder> army_builder) {
+	void createInfArchHorse(std::unique_ptr<ArmyBuilder> army_builder) {
 		m_army_builder = std::move(army_builder);
 		m_army_builder->createArmy();
 		m_army_builder->buildInfantryman();
 		m_army_builder->buildArcher();
 		m_army_builder->buildHorseman();
 	}
-	void printArmy() { m_army_builder->getArmy()->info(); }
+	void printArmy() const { m_army_builder->getArmy()->info(); }
 private:
 	std::unique_ptr<ArmyBuilder> m_army_builder;
 };

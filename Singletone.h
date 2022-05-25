@@ -1,35 +1,26 @@
 #pragma once
 
-//����������� �������� Singleton �������� �� ���� ������������� ���������� ����������, ������� ��������� ������ ��������:
-//1. ����� ���������� �������� ������.����� ����� ���������� ���������� - �� ������� ��������� �� �� ����������.
-//2. ������������� ���������� ������, �� ����, ����� ���������� ����� ���� �������� �� ����� ����� ���������.
+/*
+ http://cpp-reference.ru/patterns/creational-patterns/singleton/
+ Внутри getInstance() используется статический экземпляр нужного класса. Стандарт языка
+ программирования C++ гарантирует автоматическое уничтожение статических объектов при
+ завершении программы.
+
+ К сожалению, у реализации Мэйерса есть недостатки: сложности создания объектов производных
+ классов и невозможность безопасного доступа нескольких клиентов к единственному объекту в
+ многопоточной среде.
+ */
 
 
-//class SingleTone;
-//
-//class SingleToneDestroyer
-//{
-//private:
-//	SingleTone *p_inst;
-//public:
-//	SingleToneDestroyer() = default;
-//	~SingleToneDestroyer() { delete p_inst; }
-//	void initialize(SingleTone *ptr) { p_inst = ptr; }
-//
-//};
-//
-//
-//class SingleTone
-//{
-//private:
-//	static SingleTone *p_inst;
-//	static SingleToneDestroyer destroyer;
-//protected:
-//	SingleTone() = default;
-//	~SingleTone() = default;
-//	friend class SingleToneDestroyer;
-//public:
-//	static SingleTone &getInst(); //�������� ���������� ����������� ����� getInstance, ������� ���������� ������������ ��������� ������	������
-//};
-
+class SingletonMaers
+{
+	SingletonMaers() = default;
+	SingletonMaers(const SingletonMaers &) = default;
+	SingletonMaers &operator=(SingletonMaers &) = default;
+public:
+	static SingletonMaers &getInstance() {
+		static SingletonMaers instance;
+		return instance;
+	}
+};
 

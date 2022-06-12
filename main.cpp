@@ -7,9 +7,7 @@
 #include <chrono>
 #include <iostream>
 
-#include "Adapter_02.h"
-
-
+#include "decorator_02.h"
 
 
 int main() {
@@ -17,6 +15,20 @@ int main() {
     _CrtMemState sNew;
     _CrtMemState sDiff;
     _CrtMemCheckpoint(&sOld); //take a snapshot
+
+
+
+
+
+
+    std::unique_ptr<Widget> a_widget{ std::make_unique<BorderDecorator>(
+                                                std::make_unique<BorderDecorator>(
+                                                    std::make_unique<ScrollDecorator>(
+                                                        std::make_unique<TextField>(80, 24)))) };
+    a_widget->draw();
+
+
+
 
 
 

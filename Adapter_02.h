@@ -24,16 +24,16 @@ class Adapter : public Target
 {
 public:
 	Adapter() = default;
-	Adapter(std::unique_ptr<Adaptee> ptrAdapt) : ptrAdaptee(std::move(ptrAdapt)) { }
+	Adapter(std::unique_ptr<Adaptee> ptrAdapt) : m_ptrAdaptee(std::move(ptrAdapt)) { }
 
 	[[nodiscard]] std::string request() const override {
-		std::string to_reverse = ptrAdaptee->specificRequest();
+		std::string to_reverse = m_ptrAdaptee->specificRequest();
 		std::reverse(to_reverse.begin(), to_reverse.end());
 
 		return "Adapter: (tranclated) " + to_reverse;
 	}
 private:
-	std::unique_ptr<Adaptee> ptrAdaptee;
+	std::unique_ptr<Adaptee> m_ptrAdaptee;
 };
 
 

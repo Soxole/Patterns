@@ -24,7 +24,7 @@ public:
 	virtual ~Musician() = default;
 
 protected:
-	void output(const std::string_view text) const
+	void print(const std::string_view text) const
 	{
 		std::cout << m_name << " " << text << "." << "\n";
 	}
@@ -34,7 +34,7 @@ private:
 
 
 //concrete musicians
-class Vocalist : public Musician
+class Vocalist final : public Musician
 {
 public:
 	explicit Vocalist(const std::string_view name) : Musician(name) { }
@@ -43,128 +43,130 @@ public:
 	{
 		std::string text{ "sang couplet #" };
 		text += std::to_string(coupletNumber);
-		output(text);
+		print(text);
 	}
 	void sangChorus() const
 	{
-		output("sang chorus");
+		print("sang chorus");
 	}
 };
 
-class Guitarist : public Musician
+class Guitarist final : public Musician
 {
 public:
 	explicit Guitarist(const std::string_view name) : Musician(name) { }
 
 	void playCoolOpening() const
 	{
-		output("start with a cool opening");
+		print("start with a cool opening");
 	}
 	void playCoolRiffs() const
 	{
-		output("play cool riffs");
+		print("play cool riffs");
 	}
 	void playOtherCoolRiffs() const
 	{
-		output("play other cool riffs");
+		print("play other cool riffs");
 	}
 	void playIncrediblyCoolSolo() const
 	{
-		output("play a incredibly cool solo");
+		print("play a incredibly cool solo");
 	}
 	void playFinalAccord() const
 	{
-		output("finish the song a powerful accord");
+		print("finish the song a powerful accord");
 	}
 };
 
-class Bassist : public Musician
+class Bassist final : public Musician
 {
 public:
 	explicit Bassist(const std::string_view name) : Musician(name) { }
 
 	void followTheDrums() const
 	{
-		output("follow the drums");
+		print("follow the drums");
 	}
 	void changeRhythm(const std::string_view type) const
 	{
 		std::string text = ("change the rhythm");
 		text += type;
 		text += "a";
-		output(text);
+		print(text);
 	}
 	void stopPlaying() const
 	{
-		output("stop playing");
+		print("stop playing");
 	}
 };
 
-class Drummer : public Musician
+class Drummer final : public Musician
 {
 public:
 	explicit Drummer(const std::string_view name) : Musician(name) { }
 
 	void startPlaying() const
 	{
-		output("start playing");
+		print("start playing");
 	}
-
 	void stopPlaying() const
 	{
-		output("stopPlaying");
+		print("stopPlaying");
 	}
 };
 
 //Facade - in this case a famous group
-class BlackSabbath
+class BlackSabbath final
 {
 public:
 	BlackSabbath() :
-		vocalist(std::make_unique<Vocalist>("Ozzi Ozborn")),
-		guitarist(std::make_unique<Guitarist>("Tony Aismy")),
-		bassist(std::make_unique<Bassist>("Gizer Batler")),
-		drummer(std::make_unique<Drummer>("Bill Wourd"))
+		m_vocalist(std::make_unique<Vocalist>("Ozzi Ozborn")),
+		m_guitarist(std::make_unique<Guitarist>("Tony Aismy")),
+		m_bassist(std::make_unique<Bassist>("Gizer Batler")),
+		m_drummer(std::make_unique<Drummer>("Bill Wourd"))
 	{ }
 
 	void playSong() const
 	{
-		guitarist->playCoolOpening();
-		drummer->startPlaying();
-		bassist->followTheDrums();
-		guitarist->playCoolRiffs();
-		vocalist->singCouplet(1);
-		bassist->changeRhythm("chorus");
-		guitarist->playOtherCoolRiffs();
-		vocalist->sangChorus();
-		bassist->changeRhythm("couplet");
-		guitarist->playCoolRiffs();
-		vocalist->singCouplet(2);
-		bassist->changeRhythm("chorus");
-		guitarist->playOtherCoolRiffs();
-		vocalist->sangChorus();
-		bassist->changeRhythm("couplet");
-		guitarist->playIncrediblyCoolSolo();
-		guitarist->playCoolRiffs();
-		vocalist->singCouplet(3);
-		bassist->changeRhythm("chorus");
-		guitarist->playOtherCoolRiffs();
-		vocalist->sangChorus();
-		bassist->changeRhythm("couplet");
-		guitarist->playCoolRiffs();
-		bassist->stopPlaying();
-		drummer->stopPlaying();
-		guitarist->playFinalAccord();
+		m_guitarist->playCoolOpening();
+		m_drummer->startPlaying();
+		m_bassist->followTheDrums();
+		m_guitarist->playCoolRiffs();
+		m_vocalist->singCouplet(1);
+		m_bassist->changeRhythm("chorus");
+		m_guitarist->playOtherCoolRiffs();
+		m_vocalist->sangChorus();
+		m_bassist->changeRhythm("couplet");
+		m_guitarist->playCoolRiffs();
+		m_vocalist->singCouplet(2);
+		m_bassist->changeRhythm("chorus");
+		m_guitarist->playOtherCoolRiffs();
+		m_vocalist->sangChorus();
+		m_bassist->changeRhythm("couplet");
+		m_guitarist->playIncrediblyCoolSolo();
+		m_guitarist->playCoolRiffs();
+		m_vocalist->singCouplet(3);
+		m_bassist->changeRhythm("chorus");
+		m_guitarist->playOtherCoolRiffs();
+		m_vocalist->sangChorus();
+		m_bassist->changeRhythm("couplet");
+		m_guitarist->playCoolRiffs();
+		m_bassist->stopPlaying();
+		m_drummer->stopPlaying();
+		m_guitarist->playFinalAccord();
 	}
 
 private:
-	std::unique_ptr<Vocalist> vocalist;
-	std::unique_ptr<Guitarist> guitarist;
-	std::unique_ptr<Bassist> bassist;
-	std::unique_ptr<Drummer> drummer;
+	std::unique_ptr<Vocalist> m_vocalist;
+	std::unique_ptr<Guitarist> m_guitarist;
+	std::unique_ptr<Bassist> m_bassist;
+	std::unique_ptr<Drummer> m_drummer;
 };
 
-/*
+
+//main()
+#if 0
 BlackSabbath band;
 band.playSong();
-*/
+#endif
+

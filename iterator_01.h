@@ -1,98 +1,72 @@
 #pragma once
-#include <cstdint>
+#include <vector>
+#include <memory>
+
 
 //TITLE: Iterator
 /*
- Iterator предоставляет последовательный способ доступа к элементам коллекции, не раскрывая внутренней структуры.
- Папки с документами являются коллекциями. В офисных условиях, когда доступ к документам осуществляется через
- администратора или секретаря, именно секретарь выступает в качестве Iterator.
+РС‚РµСЂР°С‚РѕСЂ вЂ” СЌС‚Рѕ РїРѕРІРµРґРµРЅС‡РµСЃРєРёР№ РїР°С‚С‚РµСЂРЅ РїСЂРѕРµРєС‚РёСЂРѕРІР°РЅРёСЏ, РєРѕС‚РѕСЂС‹Р№ РґР°С‘С‚ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ
+РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕ РѕР±С…РѕРґРёС‚СЊ СЌР»РµРјРµРЅС‚С‹ СЃРѕСЃС‚Р°РІРЅС‹С… РѕР±СЉРµРєС‚РѕРІ, РЅРµ СЂР°СЃРєСЂС‹РІР°СЏ РёС… РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ
+РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ.
+this code gives off a smell
  */
 
-class Stack
+template<typename C>
+class Container;
+
+template<typename T, typename U>
+class Iterator final
 {
 public:
-	friend class StackIter;		//дружественное объявление
-	
-	Stack() : m_sp(-1)
-	{
-	}
-	explicit Stack(const Stack &st) = default;
-	explicit Stack(Stack &&st) = default;
-	
-	
-	void push(const int &in)
-	{
-		m_items[++m_sp] = in;
-	}
-	int pop()
-	{
-		return m_items[m_sp--];
-	}
-	[[nodiscard]] bool is_empty() const
-	{
-		return (m_sp == -1);
-	}
-	
+	using iter_type = typename std::vector<T>::iterator;
+	Iterator(U *data, bool reverse = false)
+		: m_ptr_data(data), m_iter(m_ptr_data->m_vec_data.begin())
+	{ }
 
+	void first() { m_iter = m_ptr_data->m_vec_data.begin(); }
+	void next() { ++m_iter; }
+	bool isDone(){
+		return m_iter == m_ptr_data->m_vec_data.end();
+	}
+	iter_type current() { return m_iter; }
 private:
-	inline static const int32_t size_stack = 10;
-	int32_t m_items[size_stack] {};
-	int32_t m_sp;
+	U *m_ptr_data;
+	iter_type m_iter;
 };
 
+template<typename C>
+class Container final
+{
+	friend class Iterator<C, Container>;
+public:
+	Container() = default;
+	Container(size_t s) : m_vec_data(s) {}
+	void add(C &&value) { m_vec_data.emplace_back(value); }
+	[[nodiscard]] auto createIterator() {
+		return std::make_unique<Iterator<C, Container>>(this);
+	}
+	auto &get() { return m_vec_data; }
+private:
+	std::vector<C> m_vec_data;
+};
 
-class StackIter
+class Data final
 {
 public:
-	explicit StackIter(const Stack &st) : m_st_(st)
-	{
-		m_index_= 0;
-	}
-	void operator++()
-	{
-		m_index_++;
-	}
-	bool operator()() const
-	{
-		return (m_index_ != m_st_.m_sp + 1);
-	}
-	int operator*() const
-	{
-		return m_st_.m_items[m_index_];
-	}
-
+	Data(int data = 0) : m_data(data) {}
+	void set_data(int data) { m_data = data; }
 private:
-	const Stack &m_st_;
-	int32_t m_index_{};
+	int m_data;
 };
 
-/*
- bool operator == (const Stack &left_stack, const Stack &right_stack)
-{
-	StackIter it_l(left_stack), it_r(right_stack);
-	for (; it_l(); ++it_l, ++it_r)
-	{
-		if (*it_l != *it_r)
-			break;
+//main()
+#if 0
+	Container<int> cont(10);
+	std::iota(cont.get().begin(), cont.get().end(), 1);
+	std::copy(cont.get().begin(), cont.get().end(), std::ostream_iterator<int>(std::cout, " "));
+	std::cout << '\n';
+	auto it = cont.createIterator();
+	for (it->first(); !it->isDone(); it->next()) {
+		std::cout << *it->current() << std::endl;
 	}
-	return !it_l() && !it_r();
-}
-
-int main()
-{
-	Stack st1;
-	for (int i = 1; i < 5; ++i)
-	{
-		st1.push(i);
-	}
-	Stack s2(st1), s3(st1), s4(st1), s5(st1);
-	s3.pop();
-	s5.pop();
-	s4.push(2);
-	s5.push(9);
-	cout << "1 == 2 is " << (st1 == s2) << endl;
-	cout << "1 == 3 is " << (st1 == s3) << endl;
-	cout << "1 == 4 is " << (st1 == s4) << endl;
-	cout << "1 == 5 is " << (st1 == s5) << endl;
- 
- */
+#endif

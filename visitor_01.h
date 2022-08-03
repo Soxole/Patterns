@@ -14,7 +14,7 @@
 class  ConcreteComponent_a;
 class  ConcreteComponent_b;
 
-//abstract class with two methods
+
 class Visitor
 {
 public:

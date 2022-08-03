@@ -2,33 +2,29 @@
 #include <iostream>
 #include <memory>
 
-using std::cout;
-using std::endl;
-
-
 // Product
 class Warrior
 {
 public:
-	virtual ~Warrior() {}
+	virtual ~Warrior() = default;
 	virtual void info() const = 0;
 };
 
-class Infantryman : public Warrior
+class Infantryman final : public Warrior
 {
 public:
 	void info() const override
 	{
-		cout << "Infantryman" << endl;
+		std::cout << "Infantryman" << '\n';
 	}
 };
 
-class Archer : public Warrior
+class Archer final : public Warrior
 {
 public:
 	void info() const override
 	{
-		cout << "Archer" << endl;
+		std::cout << "Archer" << '\n';
 	}
 };
 
@@ -37,7 +33,7 @@ class Horseman final : public Warrior
 public:
 	void info() const override
 	{
-		cout << "Horseman" << endl;
+		std::cout << "Horseman" << '\n';
 	}
 };
 
@@ -46,11 +42,11 @@ public:
 class Factory
 {
 public:
-	virtual ~Factory() {}
+	virtual ~Factory() = default;
 	virtual std::unique_ptr<Warrior> createWarrior() = 0;
 };
 
-class InfantryFactory : public Factory
+class InfantryFactory final : public Factory
 {
 public:
 	[[nodiscard]] std::unique_ptr<Warrior> createWarrior() override
@@ -59,7 +55,7 @@ public:
 	}
 };
 
-class ArchersFactory : public Factory
+class ArchersFactory final : public Factory
 {
 public:
 	[[nodiscard]] std::unique_ptr<Warrior> createWarrior()override
@@ -77,9 +73,9 @@ public:
 	}
 };
 
-/*
-	--main()
-	
+
+//main()
+#if 0
 	std::vector<std::unique_ptr<Warrior>> warriors;
 
 	std::unique_ptr<Factory> infantry_factory{ std::make_unique<InfantryFactory>() };
@@ -89,5 +85,4 @@ public:
 
 	for (const auto &it : warriors)
 		it->info();
-
-*/
+#endif

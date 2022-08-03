@@ -3,81 +3,91 @@
 
 //TITLE: template method
 /*
- Шаблонный метод — это поведенческий паттерн проектирования, который определяет скелет алгоритма,
- перекладывая ответственность за некоторые его шаги на подклассы. Паттерн позволяет подклассам
- переопределять шаги алгоритма, не меняя его общей структуры.
+РЁР°Р±Р»РѕРЅРЅС‹Р№ РјРµС‚РѕРґ вЂ” СЌС‚Рѕ РїРѕРІРµРґРµРЅС‡РµСЃРєРёР№ РїР°С‚С‚РµСЂРЅ РїСЂРѕРµРєС‚РёСЂРѕРІР°РЅРёСЏ, РєРѕС‚РѕСЂС‹Р№ РѕРїСЂРµРґРµР»СЏРµС‚
+СЃРєРµР»РµС‚ Р°Р»РіРѕСЂРёС‚РјР°, РїРµСЂРµРєР»Р°РґС‹РІР°СЏ РѕС‚РІРµС‚СЃС‚РІРµРЅРЅРѕСЃС‚СЊ Р·Р° РЅРµРєРѕС‚РѕСЂС‹Рµ РµРіРѕ С€Р°РіРё РЅР° РїРѕРґРєР»Р°СЃСЃС‹.
+РџР°С‚С‚РµСЂРЅ РїРѕР·РІРѕР»СЏРµС‚ РїРѕРґРєР»Р°СЃСЃР°Рј РїРµСЂРµРѕРїСЂРµРґРµР»СЏС‚СЊ С€Р°РіРё Р°Р»РіРѕСЂРёС‚РјР°, РЅРµ РјРµРЅСЏСЏ РµРіРѕ РѕР±С‰РµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹
+
+РјРёРЅСѓСЃС‹:
+-Р’С‹ Р¶С‘СЃС‚РєРѕ РѕРіСЂР°РЅРёС‡РµРЅС‹ СЃРєРµР»РµС‚РѕРј СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ Р°Р»РіРѕСЂРёС‚РјР°.
+-Р’С‹ РјРѕР¶РµС‚Рµ РЅР°СЂСѓС€РёС‚СЊ РїСЂРёРЅС†РёРї РїРѕРґСЃС‚Р°РЅРѕРІРєРё Р‘Р°СЂР±Р°СЂС‹ Р›РёСЃРєРѕРІ, РёР·РјРµРЅСЏСЏ Р±Р°Р·РѕРІРѕРµ РїРѕРІРµРґРµРЅРёРµ
+РѕРґРЅРѕРіРѕ РёР· С€Р°РіРѕРІ Р°Р»РіРѕСЂРёС‚РјР° С‡РµСЂРµР· РїРѕРґРєР»Р°СЃСЃ.
+-РЎ СЂРѕСЃС‚РѕРј РєРѕР»РёС‡РµСЃС‚РІР° С€Р°РіРѕРІ С€Р°Р±Р»РѕРЅРЅС‹Р№ РјРµС‚РѕРґ СЃС‚Р°РЅРѕРІРёС‚СЃСЏ СЃР»РёС€РєРѕРј СЃР»РѕР¶РЅРѕ РїРѕРґРґРµСЂР¶РёРІР°С‚СЊ.
  */
 
-class AbstractClass
+class ITemplate
 {
+public:
+	ITemplate() = default;
+	ITemplate(ITemplate const &) = default;
+	ITemplate &operator=(ITemplate const &) = default;
+	ITemplate(ITemplate &&) noexcept = default;
+	ITemplate &operator=(ITemplate &&) noexcept = default;
+	virtual ~ITemplate() = default;
+
+	void TemplateMethod() const {
+		BaseOperation1();
+		RequiredOperations1();
+		BaseOperation2();
+		Hook1();
+		RequiredOperation2();
+		BaseOperation3();
+		Hook2();
+	}
 protected:
 	void BaseOperation1() const {
-		std::cout << "AbstractClass says: I am doing the bulk of the work\n";
+		std::cout << "ITemplate says: I am doing the bulk of the work\n";
 	}
 	void BaseOperation2() const {
-		std::cout << "AbstractClass says: But I let subclasses override some operations\n";
+		std::cout << "ITemplate says: But I let subclasses override some operations\n";
 	}
 	void BaseOperation3() const {
-		std::cout << "AbstractClass says: But I am doing the bulk of the work anyway\n";
+		std::cout << "ITemplate says: But I am doing the bulk of the work anyway\n";
 	}
 
 	virtual void RequiredOperations1() const = 0;
 	virtual void RequiredOperation2() const = 0;
-	//Хуки предоставляют дополнительные точки расширения в некоторых критических местах алгоритма.
 	virtual void Hook1() const {}
 	virtual void Hook2() const {}
-
-public:
-	virtual ~AbstractClass() = default;
-	void TemplateMethod() const				//template method
-	{
-		this->BaseOperation1();
-		this->RequiredOperations1();
-		this->BaseOperation2();
-		this->Hook1();
-		this->RequiredOperation2();
-		this->BaseOperation3();
-		this->Hook2();
-	}
 };
 
-class ConcreteClass_1 : public AbstractClass
+class ConcreteTemplate_1 final : public ITemplate
 {
 protected:
 	void RequiredOperations1() const override {
-		std::cout << "ConcreteClass1 says: Implemented Operation1\n";
+		std::cout << "ConcreteTemplate_1 says: Implemented Operation1\n";
 	}
 	void RequiredOperation2() const override {
-		std::cout << "ConcreteClass1 says: Implemented Operation2\n";
+		std::cout << "ConcreteTemplate_1 says: Implemented Operation2\n";
 	}
 };
 
-class ConcreteClass_2 final : public AbstractClass
+class ConcreteTemplate_2 final : public ITemplate
 {
 protected:
 	void RequiredOperations1() const override {
-		std::cout << "ConcreteClass2 says: Implemented Operation1\n";
+		std::cout << "ConcreteTemplate_2 says: Implemented Operation1\n";
 	}
 	void RequiredOperation2() const override {
-		std::cout << "ConcreteClass2 says: Implemented Operation2\n";
+		std::cout << "ConcreteTemplate_2 says: Implemented Operation2\n";
 	}
 	void Hook1() const override {
-		std::cout << "ConcreteClass2 says: Overridden Hook1\n";
+		std::cout << "ConcreteTemplate_2 says: Overridden Hook1\n";
 	}
 };
 
-/*
-void client_code(unique_ptr<AbstractClass> const obj)
+//main()
+#if 0
+void client_code(std::unique_ptr<ITemplate> obj)
 {
 	obj->TemplateMethod();
 }
 int main()
 {
 	std::cout << "Same client code can work with different subclasses:\n";
-	auto concrete_class_one = make_unique<ConcreteClass_1>();
-	client_code(move(concrete_class_one));
+	auto concrete_class_one = std::make_unique<ConcreteTemplate_1>();
+	client_code(std::move(concrete_class_one));
 	std::cout << '\n' << "Same client code can work with different subclasses:\n";
-	auto concrete_class_two = make_unique<ConcreteClass_2>();
-	client_code(move(concrete_class_two));
+	auto concrete_class_two = std::make_unique<ConcreteTemplate_2>();
+	client_code(std::move(concrete_class_two));
 }
-*/
+#endif

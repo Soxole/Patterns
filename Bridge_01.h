@@ -1,43 +1,25 @@
 #pragma once
-
-#include <iostream>
-#include <iomanip>
 #include <memory>
 #include <string>
 
-using std::string;
-using std::cout;
-using std::endl;
-using std::unique_ptr;
-using std::make_unique;
 /*
-Применимость: Паттерн Мост особенно полезен когда вам приходится делать кросс-платформенные приложения, поддерживать несколько типов
-баз данных или работать с разными поставщиками похожего API (например, cloud-сервисы, социальные сети и т. д.)
-Признаки применения паттерна: Если в программе чётко выделены классы «управления» и несколько видов классов «платформ», 
-причём управляющие объекты делегируют выполнение платформам, то можно сказать, что у вас используется Мост.
-
- * Реализация устанавливает интерфейс для всех классов реализации. Он не должен
- * соответствовать интерфейсу Абстракции. На практике оба интерфейса могут быть
- * совершенно разными. Как правило, интерфейс Реализации предоставляет только
- * примитивные операции, в то время как Абстракция определяет операции более
- * высокого уровня, основанные на этих примитивах.
+РњРѕСЃС‚ вЂ” СЌС‚Рѕ СЃС‚СЂСѓРєС‚СѓСЂРЅС‹Р№ РїР°С‚С‚РµСЂРЅ РїСЂРѕРµРєС‚РёСЂРѕРІР°РЅРёСЏ, РєРѕС‚РѕСЂС‹Р№ СЂР°Р·РґРµР»СЏРµС‚ РѕРґРёРЅ РёР»Рё
+РЅРµСЃРєРѕР»СЊРєРѕ РєР»Р°СЃСЃРѕРІ РЅР° РґРІРµ РѕС‚РґРµР»СЊРЅС‹Рµ РёРµСЂР°СЂС…РёРё вЂ” Р°Р±СЃС‚СЂР°РєС†РёСЋ Рё СЂРµР°Р»РёР·Р°С†РёСЋ,
+РїРѕР·РІРѕР»СЏСЏ РёР·РјРµРЅСЏС‚СЊ РёС… РЅРµР·Р°РІРёСЃРёРјРѕ РґСЂСѓРі РѕС‚ РґСЂСѓРіР°.
  */
 
 class IImplementation
 {
 public:
 	virtual~IImplementation() = default;
-	[[nodiscard]] virtual string operationImplement() const = 0;
+	[[nodiscard]] virtual std::string operationImplement() const = 0;
 };
 
-/*
- * Каждая Конкретная Реализация соответствует определённой платформе и реализует
- * интерфейс Реализации с использованием API этой платформы.
- */
-class ConcreatImplementA : public IImplementation
+
+class ConcreatImplementA final : public IImplementation
 {
 public:
-	[[nodiscard]] string operationImplement() const override {
+	[[nodiscard]] std::string operationImplement() const override {
 		return "ConcreteImpA: Here's the result on the platform A.\n";
 	}
 };
@@ -45,50 +27,51 @@ public:
 class ConcreatImplementB final : public IImplementation
 {
 public:
-	[[nodiscard]] string operationImplement() const override {
+	[[nodiscard]] std::string operationImplement() const override {
 		return "ConcreteImpB: Here's the result on the platform B.\n";
 	}
 };
 
-/*
- * Абстракция устанавливает интерфейс для «управляющей» части двух иерархий
- * классов. Она содержит ссылку на объект из иерархии Реализации и делегирует
- * ему всю настоящую работу.
- */
+
 class Abstraction
 {
 public:
-	Abstraction(unique_ptr<IImplementation> _upImpl) : upImpl(std::move(_upImpl))
-	{}
+	Abstraction(std::unique_ptr<IImplementation> _upImpl)
+		: m_upImpl(std::move(_upImpl)) {}
+
 	~Abstraction() = default;
-	[[nodiscard]] string someOperation() const {
-		return "Abstraction: Base operation with:\n" + upImpl->operationImplement();
+
+	[[nodiscard]] std::string someOperation() const {
+		return "Abstraction: Base operation with:\n"
+			+ m_upImpl->operationImplement();
 	}
 
 protected:
-	unique_ptr<IImplementation> upImpl;
+	std::unique_ptr<IImplementation> m_upImpl;
 };
 
-/*
- * Можно расширить Абстракцию без изменения классов Реализации.
- */
-class ExtendedAbstr : public Abstraction
+
+class ExtendedAbstr final : public Abstraction
 {
 public:
-	ExtendedAbstr(unique_ptr<IImplementation> _upImpl) : Abstraction(std::move(_upImpl))
-	{}
+	ExtendedAbstr(std::unique_ptr<IImplementation> _upImpl)
+		: Abstraction(std::move(_upImpl)) {}
 
-	[[nodiscard]] string someOperation() const {
-		return "ExtendedAbstr: Extended operation with:\n" + upImpl->operationImplement();
+	[[nodiscard]] std::string someOperation() const {
+		return "ExtendedAbstr: Extended operation with:\n"
+			+ m_upImpl->operationImplement();
 	}
 };
 
-/*
-	unique_ptr<IImplementation> upImpl{ make_unique<ConcreatImplementA>() };
-	auto upAbstr{ make_unique<Abstraction>(move(upImpl)) };
-	cout << upAbstr->someOperation() << "\n";
+//main()
+#if 0
 
-	upImpl = make_unique<ConcreatImplementB>();
-	upAbstr = make_unique<ExtendedAbstr>(move(upImpl));
-	cout << upAbstr->someOperation() << "\n";
-*/
+std::unique_ptr<IImplementation> upImpl{ std::make_unique<ConcreatImplementA>() };
+auto upAbstr{ make_unique<Abstraction>(move(upImpl)) };
+std::cout << upAbstr->someOperation() << "\n";
+
+upImpl = std::make_unique<ConcreatImplementB>();
+upAbstr = std::make_unique<ExtendedAbstr>(move(upImpl));
+std::cout << upAbstr->someOperation() << "\n";
+
+#endif

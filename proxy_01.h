@@ -2,75 +2,81 @@
 #include <iostream>
 #include <memory>
 /*
- структурный
- 
-Заместитель — это объект, который выступает прослойкой между клиентом и реальным сервисным объектом. 
-Заместитель получает вызовы от клиента, выполняет свою функцию (контроль доступа, кеширование, 
-изменение запроса и прочее), а затем передаёт вызов сервисному объекту.
+Р—Р°РјРµСЃС‚РёС‚РµР»СЊ вЂ” СЌС‚Рѕ СЃС‚СЂСѓРєС‚СѓСЂРЅС‹Р№ РїР°С‚С‚РµСЂРЅ РїСЂРѕРµРєС‚РёСЂРѕРІР°РЅРёСЏ, РєРѕС‚РѕСЂС‹Р№ РїРѕР·РІРѕР»СЏРµС‚
+РїРѕРґСЃС‚Р°РІР»СЏС‚СЊ РІРјРµСЃС‚Рѕ СЂРµР°Р»СЊРЅС‹С… РѕР±СЉРµРєС‚РѕРІ СЃРїРµС†РёР°Р»СЊРЅС‹Рµ РѕР±СЉРµРєС‚С‹-Р·Р°РјРµРЅРёС‚РµР»Рё.
+Р­С‚Рё РѕР±СЉРµРєС‚С‹ РїРµСЂРµС…РІР°С‚С‹РІР°СЋС‚ РІС‹Р·РѕРІС‹ Рє РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРјСѓ РѕР±СЉРµРєС‚Сѓ, РїРѕР·РІРѕР»СЏСЏ
+СЃРґРµР»Р°С‚СЊ С‡С‚Рѕ-С‚Рѕ РґРѕ РёР»Рё РїРѕСЃР»Рµ РїРµСЂРµРґР°С‡Рё РІС‹Р·РѕРІР° РѕСЂРёРіРёРЅР°Р»Сѓ.
+
+РџСЂРёРјРµРЅРёРјРѕСЃС‚СЊ: РџР°С‚С‚РµСЂРЅ Р—Р°РјРµСЃС‚РёС‚РµР»СЊ РїСЂРёРјРµРЅСЏРµС‚СЃСЏ РІ C++ РєРѕРґРµ С‚РѕРіРґР°, РєРѕРіРґР° РЅР°РґРѕ
+Р·Р°РјРµРЅРёС‚СЊ РЅР°СЃС‚РѕСЏС‰РёР№ РѕР±СЉРµРєС‚ РµРіРѕ СЃСѓСЂСЂРѕРіР°С‚РѕРј, РїСЂРёС‡С‘Рј РЅРµР·Р°РјРµС‚РЅРѕ РґР»СЏ РєР»РёРµРЅС‚РѕРІ
+РЅР°СЃС‚РѕСЏС‰РµРіРѕ РѕР±СЉРµРєС‚Р°. Р­С‚Рѕ РїРѕР·РІРѕР»РёС‚ РІС‹РїРѕР»РЅРёС‚СЊ РєР°РєРёРµ-С‚Рѕ РґРѕР±Р°РІРѕС‡РЅС‹Рµ РїРѕРІРµРґРµРЅРёСЏ
+РґРѕ РёР»Рё РїРѕСЃР»Рµ РѕСЃРЅРѕРІРЅРѕРіРѕ РїРѕРІРµРґРµРЅРёСЏ РЅР°СЃС‚РѕСЏС‰РµРіРѕ РѕР±СЉРµРєС‚Р°.
+
+РџСЂРёР·РЅР°РєРё РїСЂРёРјРµРЅРµРЅРёСЏ РїР°С‚С‚РµСЂРЅР°: РљР»Р°СЃСЃ Р·Р°РјРµСЃС‚РёС‚РµР»СЏ С‡Р°С‰Рµ РІСЃРµРіРѕ РґРµР»РµРіРёСЂСѓРµС‚ РІСЃСЋ
+РЅР°СЃС‚РѕСЏС‰СѓСЋ СЂР°Р±РѕС‚Сѓ СЃРІРѕРµРјСѓ СЂРµР°Р»СЊРЅРѕРјСѓ РѕР±СЉРµРєС‚Сѓ. Р—Р°РјРµСЃС‚РёС‚РµР»Рё С‡Р°СЃС‚Рѕ СЃР°РјРё СЃР»РµРґСЏС‚
+Р·Р° Р¶РёР·РЅРµРЅРЅС‹Рј С†РёРєР»РѕРј СЃРІРѕРµРіРѕ СЂРµР°Р»СЊРЅРѕРіРѕ РѕР±СЉРµРєС‚Р°.
 */
 
 
 class ISubject
 {
 public:
+	ISubject() = default;
+	ISubject(ISubject const &) = default;
+	ISubject &operator=(ISubject const &) = default;
+	ISubject(ISubject && ) noexcept = default;
+	ISubject &operator=(ISubject &&) noexcept = default;
 	virtual~ISubject() = default;
+
 	virtual void request() const = 0;
 };
 
-class RealSubject : public ISubject
+class RealSubject final : public ISubject
 {
 public:
-	void request() const override
-	{
+	void request() const override {
 		std::cout << "RealSubject: Handling request.\n";
 	}
 };
 
+//proxy object
 class Proxy final : public ISubject
 {
 public:
-	Proxy(std::unique_ptr<RealSubject> realSubject) 
-		: m_realSubject{std::make_unique<RealSubject>(*realSubject)}
-	{
-	}
-	void request() const override
-	{
-		if (checkAccess())
-		{
+	explicit Proxy(std::unique_ptr<RealSubject> realSubject)
+		: m_realSubject{ std::make_unique<RealSubject>(*realSubject) } {}
+
+	void request() const override {
+		if (checkAccess()) {
 			m_realSubject->request();
-			this->logAccess();
+			logAccess();
 		}
 	}
-
 private:
-	std::unique_ptr<RealSubject> m_realSubject;
-
-	[[nodiscard]] bool checkAccess() const
-	{
+	[[nodiscard]] bool checkAccess() const {
 		std::cout << "Proxy: Checking access prior to firing a real request.\n";
 		return true;
 	}
-	void logAccess() const
-	{
-		std::cout <<"Proxy: Logging the time of request.\n";
+	void logAccess() const {
+		std::cout << "Proxy: Logging the time of request.\n";
 	}
+private:
+	std::unique_ptr<RealSubject> m_realSubject;
 };
 
-/*
-void clientCode(const ISubject &sub)
-{
+
+//main()
+#if 0
+void clientCode(const ISubject &sub) {
 	sub.request();
 }
 
-int main()
-{
-	cout << "Client: Executing the client code with a real subject:\n";
-	auto ptrRealSubject{make_unique<RealSubject>()};
-	clientCode(*ptrRealSubject);
-	cout << "\n";
-	cout << "Client: Executing the same client code with a proxy:\n";
-	//ptrProxy в main() владеет Proxy, а в классе принимает RealSubject и выполняет его метод, 
-	//который в переопределенном request() вызывает свой метод RealSubject
-	auto ptrProxy{make_unique<Proxy>(move(ptrRealSubject))};
-	clientCode(*ptrProxy);
-*/
+std::cout << "Client: Executing the client code with a real subject:\n";
+auto ptrRealSubject = std::make_unique<RealSubject>();
+clientCode(*ptrRealSubject);
+std::cout << "\n";
+std::cout << "Client: Executing the same client code with a proxy:\n";
+auto ptrProxy = std::make_unique<Proxy>(std::move(ptrRealSubject));
+clientCode(*ptrProxy);
+
+#endif

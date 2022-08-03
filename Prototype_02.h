@@ -1,41 +1,35 @@
 #pragma once
 #include <iostream>
-#include <string>
 #include <memory>
 #include <array>
 
 /*
+Prototype is a creational design pattern that allows cloning objects, even complex ones, without coupling to
+their specific classes.
 
-
+All prototype classes should have a common interface that makes it possible to copy objects even if their
+concrete classes are unknown. Prototype objects can produce full copies since objects of the same class
+can access each other’s private fields.
 */
-
-using std::string;
-using std::cout;
-using std::endl;
-using std::unique_ptr;
-using std::make_unique;
-
 
 
 class Stooge
 {
 public:
-	virtual void slap_stick() const = 0;
-	virtual unique_ptr<Stooge> clone() const = 0;
+	virtual void slapStick() const = 0;
+	[[nodiscard]] virtual std::unique_ptr<Stooge> clone() const = 0;
 	virtual ~Stooge() = default;
 };
 
 
-class Larry : public Stooge
+class Larry final : public Stooge
 {
 public:
-	void slap_stick() const override
-	{
-		cout << "class Larry " << endl;
+	void slapStick() const override {
+		std::cout << "class Larry " << '\n';
 	}
-	[[nodiscard]] unique_ptr<Stooge> clone() const noexcept override
-	{
-		return make_unique<Larry>();
+	[[nodiscard]] std::unique_ptr<Stooge> clone() const override {
+		return std::make_unique<Larry>();
 	}
 };
 
@@ -43,48 +37,43 @@ public:
 class Moe final : public Stooge
 {
 public:
-	void slap_stick() const override
-	{
-		cout << "class Moe " << endl;
+	void slapStick() const override {
+		std::cout << "class Moe " << '\n';
 	}
-	[[nodiscard]] unique_ptr<Stooge> clone() const noexcept override
-	{
-		return make_unique<Moe>();
+	[[nodiscard]] std::unique_ptr<Stooge> clone() const override {
+		return std::make_unique<Moe>();
 	}
 };
 
-//������� 
-class Factory
+
+class FactoryPrototype final
 {
 public:
-	[[nodiscard]] static unique_ptr<Stooge> make_stooge(int choice)
-	{
-		return s_prototypes[choice]->clone();
+	[[nodiscard]] static std::unique_ptr<Stooge> makeStooge(int choice) {
+		return s_prototypes_[choice]->clone();
 	}
 protected:
-	static inline const size_t amountPtrDerivedClass = 3;			//сумма указателей производных классов Larry, Moe
-	static inline std::array<unique_ptr<Stooge>, amountPtrDerivedClass> s_prototypes = {		//using std::array<> !!!
-		nullptr, make_unique<Larry>(), make_unique<Moe>()
-	};
+	static constexpr size_t amount_ptr_derived_class = 3;										//сумма указателей производных классов Larry, Moe
+	static inline std::array<std::unique_ptr<Stooge>, amount_ptr_derived_class> s_prototypes_ = //using std::array<> !!!
+	{ nullptr, std::make_unique<Larry>(), std::make_unique<Moe>() };
 };
 
 
-/*
-	int main()
-	{
+//main()
+#if 0
+int main() {
+	std::vector<std::unique_ptr<Stooge>> vecProt;
 
-		vector<unique_ptr<Stooge>> vecProt;
+	auto objLarry = FactoryPrototype::makeStooge(1);
+	auto objMoe = FactoryPrototype::makeStooge(2);
+	vecProt.emplace_back(move(objMoe));
+	vecProt.emplace_back(move(FactoryPrototype::makeStooge(2)));
+	vecProt.emplace_back(move(objLarry));
 
-		auto objLarry = Factory::make_stooge(1);
-		auto objMoe = Factory::make_stooge(2);
-		vecProt.emplace_back(move(objMoe));						<--������������ std::move(), ��� ���������� ��������� � ������ ����������
-		vecProt.emplace_back(move(Factory::make_stooge(2)));	// ��� ���������� �������� ������� ����� ������� ����� ��������
-		vecProt.emplace_back(move(objLarry));
+	for (const auto &it : vecProt)
+		it->slapStick();
 
-		for (const auto &it : vecProt)
-			it->slap_stick();
+}
+#endif
 
-		return 0;
-	}
 
-*/

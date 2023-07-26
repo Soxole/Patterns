@@ -4,7 +4,6 @@
 #include <string>
 
 
-//TODO: pattern composite; incorrect working 
 
 /*
  Компоновщик — это структурный паттерн проектирования, который позволяет сгруппировать множество объектов
@@ -21,79 +20,72 @@ class IComponent
 {
 public:
 	IComponent() = default;
+	IComponent(IComponent const &) = default;
+	IComponent &operator=(IComponent const &) = default;
+	IComponent(IComponent &&) noexcept = default;
+	IComponent &operator=(IComponent &&) noexcept = default;
 	virtual ~IComponent() = default;
 
 	//setter
-	void setParent(const std::shared_ptr<IComponent> &parent)
-	{
+	void setParent(const std::shared_ptr<IComponent> &parent) {
 		m_parent_ = parent;
 	}
 	//getter; unused
-	[[nodiscard]] std::shared_ptr<IComponent> getParent() const
-	{
-		auto tmp = m_parent_.lock();
-		if (tmp)
+	[[nodiscard]] std::shared_ptr<IComponent> getParent() const {		
+		if ( auto tmp = m_parent_.lock())
 			return tmp;
 
 		return nullptr;
 	}
 
 	//empty methods 
-	[[maybe_unused]] virtual void addComp(std::shared_ptr<IComponent> &&component)
-	{}
-	[[maybe_unused]] virtual void removeComp(const std::shared_ptr<IComponent> &component)
-	{}
+	[[maybe_unused]]
+	virtual void addComp(std::shared_ptr<IComponent> &&component) {}
+	[[maybe_unused]]
+	virtual void removeComp(const std::shared_ptr<IComponent> &component) {}
 
 	[[nodiscard]] virtual bool isComposite() const {
-		return false;
+		return true;
 	}
-	//some operation return string
 	[[nodiscard]] virtual std::string operation() const {
 		return "";
 	}
 
 protected:
-	std::weak_ptr<IComponent> m_parent_; //weak_ptr
+	std::weak_ptr<IComponent> m_parent_;
 };
 
 //Leaf
-class Leaf : public IComponent
+class Leaf final : public IComponent
 {
 public:
-	[[nodiscard]] std::string operation() const override
-	{
+	[[nodiscard]] std::string operation() const override {
 		return "leaf";
 	}
 };
 
-//Composite derived from IComponent; stores pointer to IComponent
-class Composite final : public IComponent, public std::enable_shared_from_this<Composite>
+class Composite final : public IComponent,
+	public std::enable_shared_from_this<Composite>
 {
 public:
-	void addComp(std::shared_ptr<IComponent> &&component) override
-	{
+	void addComp(std::shared_ptr<IComponent> &&component) override {
 		std::weak_ptr tmp_this_composite(shared_from_this());
 		m_children_.emplace_back(component);
-		if (!tmp_this_composite.expired())
-		{
+		if (!tmp_this_composite.expired()) {
 			component->setParent(tmp_this_composite.lock());	//ptr to this
 		}
 	}
 
-	void removeComp(const std::shared_ptr<IComponent> &component) override
-	{
+	void removeComp(const std::shared_ptr<IComponent> &component) override {
 		m_children_.remove(component);
 		component->setParent(nullptr);
 	}
 
-	[[nodiscard]] std::string operation() const override
-	{
+	[[nodiscard]] std::string operation() const override {
 		std::string result;
 
-		for (const auto &component : m_children_)
-		{
-			if (component == m_children_.back())
-			{
+		for (const auto &component : m_children_) {
+			if (component == m_children_.back()) {
 				result += component->operation();
 			}
 			else {
@@ -102,59 +94,62 @@ public:
 		}
 		return "Branch(" + result + ")";
 	}
-
 protected:
 	std::list<std::shared_ptr<IComponent>> m_children_;
 };
 
-/*
-
-
-void client_code(const shared_ptr<IComponent> &component) {
+//main()
+#if 0
+void client_code(const std::shared_ptr<IComponent> &component) {
 
 	std::cout << "RESULT: " << component->operation();
 }
 
-
-void client_code2(shared_ptr<IComponent> &&component1, shared_ptr<IComponent> &&component2) {
+void client_code2(std::shared_ptr<IComponent> &&component1, std::shared_ptr<IComponent> &&component2) {
 
 	if (component1->isComposite()) {
-		component1->addComp(move(component2));
+		component1->addComp(std::move(component2));
 	}
 	std::cout << "RESULT: " << component1->operation();
 }
 
+int main() {
+	std::shared_ptr<IComponent> simple{ std::make_shared<Leaf>() };
+	std::cout << "Client: I've got a simple component:\n";
+	client_code(simple); //cl_1
+	std::cout << "\n";
 
-int main()
-{
-		shared_ptr<IComponent> simple{ make_shared<Leaf>() };
-		std::cout << "Client: I've got a simple component:\n";
-		client_code(simple); //cl_1
-		cout << "\n";
+	std::shared_ptr<IComponent> tree{ std::make_shared<Composite>() };
+	std::shared_ptr<IComponent> branch{ std::make_shared<Composite>() };
+	std::unique_ptr<IComponent> leaf_1{ std::make_unique<Leaf>() }; //once using
+	std::unique_ptr<IComponent> leaf_2{ std::make_unique<Leaf>() };	//once using
+	std::unique_ptr<IComponent> leaf_3{ std::make_unique<Leaf>() };	//once using
 
-		shared_ptr<IComponent> tree{ make_shared<Composite>() };
-		shared_ptr<IComponent> branch{ make_shared<Composite>() };
-		unique_ptr<IComponent> leaf_1{ make_unique<Leaf>() }; //once using
-		unique_ptr<IComponent> leaf_2{ make_unique<Leaf>() };	//once using
-		unique_ptr<IComponent> leaf_3{ make_unique<Leaf>() };	//once using
+	branch->addComp(move(leaf_1));
+	branch->addComp(move(leaf_2));
 
-		branch->addComp(move(leaf_1));
-		branch->addComp(move(leaf_2));
+	std::shared_ptr<IComponent> branch2{ std::make_shared<Composite>() };
 
-		shared_ptr<IComponent> branch2{ make_shared<Composite>() };
+	branch2->addComp(move(leaf_3));
+	tree->addComp(move(branch));
+	tree->addComp(move(branch2));
 
-		branch2->addComp(move(leaf_3));
-		tree->addComp(move(branch));
-		tree->addComp(move(branch2));
+	std::cout << "Client: Now I've got a composite tree:\n";
+	client_code(tree);	//cl_1
+	std::cout << "\n\n";
 
-		std::cout << "Client: Now I've got a composite tree:\n";
-		client_code(tree);	//cl_1
-		std::cout << "\n\n";
+	std::cout << "Client: I don't need to check the components classes even when managing the tree:\n";
 
-		std::cout << "Client: I don't need to check the components classes even when managing the tree:\n";
-
-		client_code2(move(tree), move(simple));	//cl_1
-		std::cout << "\n";
+	client_code2(move(tree), move(simple));	//cl_1
+	std::cout << "\n";
 }
 
-*/
+//output:
+Client: I've got a simple component:
+RESULT : leaf
+Client : Now I've got a composite tree:
+RESULT : Branch(Branch(leaf + leaf) + Branch(leaf))
+
+Client : I don't need to check the components classes even when managing the tree:
+RESULT : Branch(Branch(leaf + leaf) + Branch(leaf) + leaf)
+#endif

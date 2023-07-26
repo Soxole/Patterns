@@ -31,9 +31,8 @@ public:
 		m_parent_ = parent;
 	}
 	//getter; unused
-	[[nodiscard]] std::shared_ptr<IComponent> getParent() const {
-		auto tmp = m_parent_.lock();
-		if (tmp)
+	[[nodiscard]] std::shared_ptr<IComponent> getParent() const {		
+		if ( auto tmp = m_parent_.lock())
 			return tmp;
 
 		return nullptr;
@@ -86,7 +85,6 @@ public:
 		std::string result;
 
 		for (const auto &component : m_children_) {
-			//std::cout << typeid(*component).name() << " <==> " << typeid(*m_children_.back()).name() << '\n';
 			if (component == m_children_.back()) {
 				result += component->operation();
 			}

@@ -40,17 +40,16 @@ public:
 	Component &operator=(Component &&) noexcept = default;
 	virtual ~Component() = default;
 
-	virtual void accept(Visitor &&visitor) = 0;
+	virtual void accept(Visitor const &visitor) = 0;
 };
 
 //concrete component a
-class ConcreteComponent_a final : public Component,
+class ConcreteComponent_a : public Component,
 	public std::enable_shared_from_this<ConcreteComponent_a>
 {
 public:
-	void accept(Visitor &&visitor) override {
-		const std::weak_ptr tmp_concrete_component_a(shared_from_this());	//ptr to this 
-		if (!tmp_concrete_component_a.expired()) {
+	void accept(Visitor const &visitor) override {
+		if (const std::weak_ptr tmp_concrete_component_a(shared_from_this()); !tmp_concrete_component_a.expired()) {
 			visitor.visit_concrete_component_a(*tmp_concrete_component_a.lock());
 		}
 	}
@@ -61,17 +60,17 @@ public:
 };
 
 //concrete component b
-class ConcreteComponent_b final : public Component,
+class ConcreteComponent_b : public Component,
 	public std::enable_shared_from_this<ConcreteComponent_b>
 {
 public:
-	void accept(Visitor &&visitor) override {
-		const std::weak_ptr tmp_concrete_component_b(shared_from_this());	//ptr to this 
-		if (!tmp_concrete_component_b.expired()) {
+	void accept(Visitor const &visitor) override {
+		if (const std::weak_ptr tmp_concrete_component_b(shared_from_this()); !tmp_concrete_component_b.expired()) {
 			visitor.visit_concrete_component_b(*tmp_concrete_component_b.lock());
 		}
 	}
-	std::string special_method_of_concrete_component_b() const {
+
+	static std::string special_method_of_concrete_component_b(){
 		return "B";
 	}
 };
